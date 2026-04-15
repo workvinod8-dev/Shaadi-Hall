@@ -15,9 +15,9 @@
 // ── PASTE YOUR FIREBASE CONFIG HERE ──
 const firebaseConfig = {
   apiKey:            "AIzaSyDyUn5EqZ3lZdjsqr_f_DYhc1fd8CZvYdg",
-  authDomain:        "shaadi-hall-web.firebaseapp.com",
-  projectId:         "shaadi-hall-web",
-  storageBucket:     "shaadi-hall-web.firebasestorage.app",
+  authDomain:        "shaadi-venue-web.firebaseapp.com",
+  projectId:         "shaadi-venue-web",
+  storageBucket:     "shaadi-venue-web.firebasestorage.app",
   messagingSenderId: "1003275659792",
   appId:             "1:1003275659792:web:725fc884866b6e1fd6b895",
   measurementId:     "G-9BFE41FYNG"
