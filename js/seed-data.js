@@ -496,41 +496,80 @@ const sampleCities = [
 async function seedData() {
   console.log("🌱 Starting data seed...");
   try {
+    // Check if halls already exist to prevent duplicate seeding
+    const existingHalls = await db.collection("halls").limit(1).get();
+    if (!existingHalls.empty) {
+      const overwrite = confirm("Halls already exist in Firestore! Seed again? (This will ADD duplicates — click Cancel if already seeded)");
+      if (!overwrite) {
+        console.log("⏭️ Seed cancelled — data already exists.");
+        return;
+      }
+    }
+
     // Seed halls
     for (const hall of vijayapuraHalls) {
-      await db.collection("halls").add({
-        ...hall,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      console.log("✅ Hall added:", hall.name);
+      try {
+        await db.collection("halls").add({
+          ...hall,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        console.log("✅ Hall added:", hall.name);
+      } catch (hallErr) {
+        console.error("❌ Failed to add hall:", hall.name, hallErr.message);
+      }
     }
+
     // Seed vendors
     for (const vendor of sampleVendors) {
-      await db.collection("vendors").add({
-        ...vendor,
-        uid: null,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      console.log("✅ Vendor added:", vendor.name);
+      try {
+        await db.collection("vendors").add({
+          ...vendor,
+          uid: null,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        console.log("✅ Vendor added:", vendor.name);
+      } catch (vendorErr) {
+        console.error("❌ Failed to add vendor:", vendor.name, vendorErr.message);
+      }
     }
+
     // Seed cities
     for (const city of sampleCities) {
-      await db.collection("cities").doc(city.name.toLowerCase()).set(city);
-      console.log("✅ City added:", city.name);
+      try {
+        await db.collection("cities").doc(city.name.toLowerCase()).set(city);
+        console.log("✅ City added:", city.name);
+      } catch (cityErr) {
+        console.error("❌ Failed to add city:", city.name, cityErr.message);
+      }
     }
+
     console.log("🎉 Seed complete!");
-    alert("Data seeded successfully! Check Firestore console.");
+    alert("✅ Data seeded successfully! Refresh the page to see halls.");
   } catch (err) {
-    console.error("❌ Seed error:", err);
-    alert("Error seeding data: " + err.message);
+    console.error("❌ Seed error:", err.code, err.message);
+    alert("Error seeding data: " + err.message + "
+
+Make sure you are running this from a page that has firebase-config.js loaded (e.g. index.html).");
   }
 }
 
 // ── Create admin user function ──
 async function createAdminUser(email, password, name) {
   try {
-    const cred = await auth.createUserWithEmailAndPassword(email, password);
+    let cred;
+    try {
+      cred = await auth.createUserWithEmailAndPassword(email, password);
+      console.log("✅ New admin account created:", email);
+    } catch (createErr) {
+      if (createErr.code === "auth/email-already-in-use") {
+        // Admin already exists — just sign in and update Firestore role
+        console.log("ℹ️ Email already exists, signing in instead...");
+        cred = await auth.signInWithEmailAndPassword(email, password);
+      } else {
+        throw createErr;
+      }
+    }
     await db.collection("users").doc(cred.user.uid).set({
       uid: cred.user.uid,
       name: name || "Admin",
@@ -538,12 +577,12 @@ async function createAdminUser(email, password, name) {
       role: "admin",
       isActive: true,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    console.log("✅ Admin user created:", email);
-    alert("Admin created! UID: " + cred.user.uid);
+    }, { merge: true });
+    console.log("✅ Admin user ready:", email, "| UID:", cred.user.uid);
+    alert("Admin ready! UID: " + cred.user.uid);
     return cred.user;
   } catch (err) {
-    console.error("Error:", err);
+    console.error("❌ createAdminUser error:", err.code, err.message);
     alert("Error: " + err.message);
   }
 }
