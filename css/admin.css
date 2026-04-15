@@ -3,16 +3,13 @@
    Theme: Ivory & Saffron | Fonts: Cinzel + Poppins
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
 
 /* ============================================================
    SHAADI VENUE - Admin Panel Styles
    ============================================================ */
 
 :root {
-  /* ... baaki variables ... */
-  --admin-crimson: #8B1A1A;   /* ← ADD KARO */
-  --admin-gold:    #C8960C;   /* ← ADD KARO */
   --admin-bg:            #FFFDF8;
   --admin-sidebar:       #4A2414;
   --admin-sidebar-hover: rgba(217,154,43,0.14);
@@ -24,8 +21,8 @@
   --admin-blush:         #D99A2B;
   --admin-rose-light:    #F7E7C6;
   --admin-rose-deep:     #7E2B0C;
-  --admin-crimson:       #8B1A1A;   /* ← YE ADD KARO */
-  --admin-gold:          #C8960C;   /* ← YE ADD KARO */
+  --admin-crimson:       #8B1A1A;
+  --admin-gold:          #C8960C;
   --success:  #3d9e6e;
   --warning:  #c07a2a;
   --danger:   #c0394a;
@@ -203,17 +200,18 @@ body.admin-body {
 .admin-content {
   padding: 32px;
   flex: 1;
-  max-width: 100%;  /* ← YE ADD KARO */
-  width: 100%;      /* ← YE ADD KARO */
-  box-sizing: border-box; /* ← YE ADD KARO */
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* ── Stats Cards ── */
 /* Stats ko 3 columns mein dikhao */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);  /* ya repeat(auto-fill, minmax(200px, 1fr)) */
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
+  margin-bottom: 28px;
 }
 
 .stat-card {
