@@ -6,8 +6,121 @@
   <title>Admin Dashboard — Shaadi Hall</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/admin.css">
+  <style>
+    /* ── Hamburger Button ── */
+    .hamburger-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 40px; height: 40px;
+      border-radius: 8px;
+      background: var(--admin-bg);
+      border: 1.5px solid var(--admin-border);
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: all 0.2s;
+    }
+    .hamburger-btn:hover { background: var(--admin-border); }
+    @media (max-width: 1024px) { .hamburger-btn { display: flex; } }
+
+    /* Mobile sidebar overlay */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 99;
+    }
+    .sidebar-overlay.active { display: block; }
+
+    /* ── Welcome Banner ── */
+    .welcome-banner {
+      background: linear-gradient(135deg, var(--admin-sidebar) 0%, #7A3A20 100%);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+    .welcome-banner::before {
+      content: '🏛️';
+      position: absolute;
+      right: 24px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 6rem;
+      opacity: 0.07;
+      pointer-events: none;
+    }
+    .welcome-banner h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: #fff;
+      margin: 0 0 6px;
+    }
+    .welcome-banner h2 span { color: var(--admin-gold); }
+    .welcome-banner p { color: rgba(255,255,255,0.65); font-size: 0.88rem; margin: 0; }
+    .welcome-date {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 12px 20px;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.82rem;
+      white-space: nowrap;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .welcome-date strong { display: block; color: var(--admin-gold); font-size: 1rem; margin-bottom: 2px; }
+
+    /* ── Section Labels ── */
+    .section-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--admin-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--admin-border);
+    }
+
+    /* ── Stat card clickable ── */
+    .stat-card-link { text-decoration: none; display: block; }
+    .stat-card { position: relative; overflow: hidden; }
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: transparent;
+      transition: background 0.2s;
+    }
+    .stat-card:hover::after { background: var(--admin-crimson); }
+    .stat-card:hover { box-shadow: 0 6px 20px rgba(139,26,26,0.12); }
+    .quick-action-icon { transition: transform 0.2s; }
+    .quick-action:hover .quick-action-icon { transform: scale(1.15); }
+
+    @media (max-width: 768px) {
+      .welcome-banner { flex-direction: column; align-items: flex-start; }
+      .welcome-date { width: 100%; box-sizing: border-box; }
+      .welcome-banner::before { display: none; }
+    }
+  </style>
 </head>
 <body class="admin-body">
+
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
 <div class="admin-layout">
 
@@ -26,7 +139,7 @@
       <a href="admin-dashboard.html" class="sidebar-link active"><span class="link-icon">📊</span> Dashboard</a>
       <a href="admin-halls.html"     class="sidebar-link"><span class="link-icon">🏛️</span> Marriage Halls</a>
       <a href="admin-vendors.html"   class="sidebar-link"><span class="link-icon">🎭</span> Vendors</a>
-      <a href="admin-bookings.html"  class="sidebar-link"><span class="link-icon">📅</span> Bookings <span class="badge" id="sb-pending">…</span></a>
+      <a href="admin-bookings.html"  class="sidebar-link"><span class="link-icon">📅</span> Bookings <span class="badge" id="sb-pending" style="display:none">0</span></a>
       <a href="admin-users.html"     class="sidebar-link"><span class="link-icon">👥</span> Users</a>
 
       <div class="sidebar-section-label" style="margin-top:12px">Settings</div>
@@ -34,17 +147,21 @@
       <a href="#" class="sidebar-link" onclick="AuthModule.logout()"><span class="link-icon">🚪</span> Logout</a>
     </nav>
 
-    <div class="sidebar-footer" style="font-size:0.75rem;color:rgba(255,255,255,0.3)">
+    <div class="sidebar-footer">
       Logged in as <span id="admin-name" style="color:var(--admin-gold)">Admin</span>
     </div>
   </aside>
 
   <!-- ── Main ── -->
   <main class="admin-main">
+
+    <!-- Top Bar -->
     <div class="admin-topbar">
-      <div>
-        <div class="topbar-title">Dashboard Overview</div>
-        <div style="font-size:0.78rem;color:var(--admin-muted)" id="today-date"></div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="hamburger-btn" onclick="toggleSidebar()">☰</button>
+        <div>
+          <div class="topbar-title">Dashboard</div>
+        </div>
       </div>
       <div class="topbar-right">
         <div class="topbar-icon" title="Notifications"><span>🔔</span><span class="notif-dot"></span></div>
@@ -55,61 +172,67 @@
 
     <div class="admin-content">
 
-      <!-- Welcome -->
-      <div style="margin-bottom:24px">
-        <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--admin-text)">Welcome back, <span id="admin-welcome-name" style="color:var(--admin-crimson)">Admin</span> 👋</h2>
-        <p style="color:var(--admin-muted);font-size:0.88rem">Here's what's happening on ShaadiHall today.</p>
+      <!-- Welcome Banner -->
+      <div class="welcome-banner">
+        <div>
+          <h2>Welcome back, <span id="admin-welcome-name">Admin</span> 👋</h2>
+          <p>Here's what's happening on ShaadiHall today.</p>
+        </div>
+        <div class="welcome-date">
+          <strong id="today-day">—</strong>
+          <span id="today-date">Loading…</span>
+        </div>
       </div>
 
-      <!-- Stats Cards -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon crimson">🏛️</div>
-          <div>
-            <div class="stat-value" id="stat-halls">—</div>
-            <div class="stat-label">Marriage Halls</div>
+      <!-- Stats -->
+      <div class="section-title">Overview</div>
+      <div class="stats-grid" style="margin-bottom:32px">
+
+        <a href="admin-halls.html" class="stat-card-link">
+          <div class="stat-card">
+            <div class="stat-icon crimson">🏛️</div>
+            <div><div class="stat-value" id="stat-halls">—</div><div class="stat-label">Marriage Halls</div></div>
           </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon gold">🎭</div>
-          <div>
-            <div class="stat-value" id="stat-vendors">—</div>
-            <div class="stat-label">Vendors</div>
+        </a>
+
+        <a href="admin-vendors.html" class="stat-card-link">
+          <div class="stat-card">
+            <div class="stat-icon gold">🎭</div>
+            <div><div class="stat-value" id="stat-vendors">—</div><div class="stat-label">Vendors</div></div>
           </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon green">📅</div>
-          <div>
-            <div class="stat-value" id="stat-bookings">—</div>
-            <div class="stat-label">Total Bookings</div>
+        </a>
+
+        <a href="admin-bookings.html" class="stat-card-link">
+          <div class="stat-card">
+            <div class="stat-icon green">📅</div>
+            <div><div class="stat-value" id="stat-bookings">—</div><div class="stat-label">Total Bookings</div></div>
           </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon blue">👥</div>
-          <div>
-            <div class="stat-value" id="stat-customers">—</div>
-            <div class="stat-label">Customers</div>
+        </a>
+
+        <a href="admin-users.html" class="stat-card-link">
+          <div class="stat-card">
+            <div class="stat-icon blue">👥</div>
+            <div><div class="stat-value" id="stat-customers">—</div><div class="stat-label">Customers</div></div>
           </div>
-        </div>
+        </a>
+
         <div class="stat-card">
           <div class="stat-icon crimson">✉️</div>
-          <div>
-            <div class="stat-value" id="stat-enquiries">—</div>
-            <div class="stat-label">Enquiries</div>
-          </div>
+          <div><div class="stat-value" id="stat-enquiries">—</div><div class="stat-label">Enquiries</div></div>
         </div>
-        <div class="stat-card">
-          <div class="stat-icon gold">⏳</div>
-          <div>
-            <div class="stat-value" id="stat-pending">—</div>
-            <div class="stat-label">Pending Bookings</div>
+
+        <a href="admin-bookings.html" class="stat-card-link">
+          <div class="stat-card">
+            <div class="stat-icon gold">⏳</div>
+            <div><div class="stat-value" id="stat-pending">—</div><div class="stat-label">Pending Bookings</div></div>
           </div>
-        </div>
+        </a>
+
       </div>
 
       <!-- Quick Actions -->
-      <div style="margin-bottom:8px;font-size:0.82rem;font-weight:600;color:var(--admin-muted);text-transform:uppercase;letter-spacing:0.06em">Quick Actions</div>
-      <div class="quick-actions">
+      <div class="section-title">Quick Actions</div>
+      <div class="quick-actions" style="margin-bottom:32px">
         <a href="admin-halls.html"    class="quick-action"><div class="quick-action-icon">➕</div><div class="quick-action-label">Add Hall</div></a>
         <a href="admin-vendors.html"  class="quick-action"><div class="quick-action-icon">✅</div><div class="quick-action-label">Approve Vendors</div></a>
         <a href="admin-bookings.html" class="quick-action"><div class="quick-action-icon">📋</div><div class="quick-action-label">View Bookings</div></a>
@@ -117,7 +240,7 @@
         <a href="index.html" target="_blank" class="quick-action"><div class="quick-action-icon">🌐</div><div class="quick-action-label">Visit Site</div></a>
       </div>
 
-      <!-- Recent Bookings Table -->
+      <!-- Recent Bookings -->
       <div class="table-card">
         <div class="table-header">
           <div class="table-title">⏳ Recent Pending Bookings</div>
@@ -154,20 +277,47 @@
 <script src="js/main.js"></script>
 <script src="js/admin.js"></script>
 <script>
-  document.addEventListener("DOMContentLoaded", async () => {
+  function toggleSidebar() {
+    const sidebar = document.getElementById('admin-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    const open    = sidebar.classList.toggle('open');
+    overlay.classList.toggle('active', open);
+  }
+  function closeSidebar() {
+    document.getElementById('admin-sidebar').classList.remove('open');
+    document.getElementById('sidebar-overlay').classList.remove('active');
+  }
+
+  // Set date in banner
+  (function() {
+    const now = new Date();
+    const dayEl  = document.getElementById('today-day');
+    const dateEl = document.getElementById('today-date');
+    if (dayEl)  dayEl.textContent  = now.toLocaleDateString('en-IN', { weekday: 'long' });
+    if (dateEl) dateEl.textContent = now.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+  })();
+
+  document.addEventListener('DOMContentLoaded', async () => {
     await initAdmin();
+
     const data = await AuthModule.getCurrentUserData();
     if (data) {
-      document.getElementById("admin-welcome-name").textContent = data.name;
-      document.getElementById("admin-avatar").textContent = data.name[0].toUpperCase();
+      const name = data.name || 'Admin';
+      document.getElementById('admin-welcome-name').textContent = name;
+      document.getElementById('admin-name').textContent         = name;
+      document.getElementById('admin-avatar').textContent       = name[0].toUpperCase();
     }
-    document.getElementById("today-date").textContent = new Date().toLocaleDateString("en-IN", { weekday:"long", year:"numeric", month:"long", day:"numeric" });
+
     loadDashboardStats();
 
-    // Update sidebar pending badge
-    const pendingSnap = await db.collection("bookings").where("status","==","pending").get();
-    const sbEl = document.getElementById("sb-pending");
-    if (sbEl) sbEl.textContent = pendingSnap.size;
+    // Pending badge in sidebar
+    const pendingSnap = await db.collection('bookings').where('status', '==', 'pending').get();
+    const sbEl = document.getElementById('sb-pending');
+    if (sbEl && pendingSnap.size > 0) {
+      sbEl.textContent    = pendingSnap.size;
+      sbEl.style.display  = '';
+    }
+
     hideLoading();
   });
 </script>
