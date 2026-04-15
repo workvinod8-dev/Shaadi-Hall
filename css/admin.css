@@ -197,12 +197,18 @@ body.admin-body {
 }
 
 /* ── Content Area ── */
-.admin-content { padding: 32px; flex: 1; }
+.admin-content {
+  padding: 32px;
+  flex: 1;
+  max-width: 100%;  /* ← YE ADD KARO */
+  width: 100%;      /* ← YE ADD KARO */
+  box-sizing: border-box; /* ← YE ADD KARO */
+}
 
 /* ── Stats Cards ── */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(3, 1fr); /* ← CHANGE KARO */
   gap: 20px;
   margin-bottom: 28px;
 }
