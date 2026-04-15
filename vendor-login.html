@@ -79,6 +79,7 @@
         <label class="form-label">Service Category *</label>
         <select class="form-input" id="vr-category" required>
           <option value="">Select your service…</option>
+          <option value="hall_owner">🏛️ Hall Owner (List My Marriage Hall)</option>
           <option value="catering">🍽️ Catering</option>
           <option value="decoration">💐 Decoration</option>
           <option value="photography">📸 Photography / Videography</option>
@@ -127,6 +128,14 @@
       if (role === "vendor") window.location.href = "vendor-dashboard.html";
     });
   });
+
+  // Auto-switch to Register tab and pre-select Hall Owner if ?type=hall in URL
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get("type") === "hall") {
+    switchTab("register", document.querySelector(".tab-btn:last-child"));
+    const catSelect = document.getElementById("vr-category");
+    if (catSelect) catSelect.value = "hall_owner";
+  }
 </script>
 </body>
 </html>
