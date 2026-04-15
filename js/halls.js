@@ -11,9 +11,11 @@ async function loadHalls() {
   grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px"><div class="loader" style="margin:auto"></div></div>`;
 
   try {
-    const snap = await db.collection("halls").orderBy("isFeatured", "desc").orderBy("rating", "desc").get();
+    const snap = await db.collection("halls").get(); // fetch all, sort client-side
     allHalls = [];
     snap.forEach(doc => allHalls.push({ id: doc.id, ...doc.data() }));
+    // Sort client-side: featured first, then by rating (avoids Firestore composite index requirement)
+    allHalls.sort((a, b) => (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0) || b.rating - a.rating);
     filteredHalls = [...allHalls];
     renderHalls();
     if (countEl) countEl.textContent = allHalls.length;
