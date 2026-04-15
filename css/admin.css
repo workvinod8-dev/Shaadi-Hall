@@ -10,6 +10,9 @@
    ============================================================ */
 
 :root {
+  /* ... baaki variables ... */
+  --admin-crimson: #8B1A1A;   /* ← ADD KARO */
+  --admin-gold:    #C8960C;   /* ← ADD KARO */
   --admin-bg:            #FFFDF8;
   --admin-sidebar:       #4A2414;
   --admin-sidebar-hover: rgba(217,154,43,0.14);
@@ -206,11 +209,11 @@ body.admin-body {
 }
 
 /* ── Stats Cards ── */
+/* Stats ko 3 columns mein dikhao */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* ← CHANGE KARO */
-  gap: 20px;
-  margin-bottom: 28px;
+  grid-template-columns: repeat(3, 1fr);  /* ya repeat(auto-fill, minmax(200px, 1fr)) */
+  gap: 16px;
 }
 
 .stat-card {
