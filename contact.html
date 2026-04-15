@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us — Shaadi Hall</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="loading-overlay" id="loading-overlay"><div class="loader"></div></div>
+
+<nav class="navbar" id="navbar" style="background:rgba(255,249,240,0.97);box-shadow:var(--shadow-sm)">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="logo-icon">🏛️</div><span>Shaadi<em style="font-style:italic;color:var(--gold)">Venue</em></span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="halls.html">Halls</a></li>
+      <li><a href="vendors.html">Vendors</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html" style="color:var(--crimson)">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="customer-login.html" class="btn btn-primary btn-sm" id="nav-login-btn">Login</a>
+      <div id="nav-user-menu" style="display:none;align-items:center;gap:10px">
+        <a href="customer-dashboard.html" class="btn btn-gold btn-sm">My Account</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> › <span>Contact</span></div>
+    <h1 class="page-hero-title">Get In Touch</h1>
+    <p style="color:rgba(255,255,255,0.7);margin-top:0.5rem">We're here to help you plan your perfect wedding</p>
+  </div>
+</div>
+
+<section>
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:40px;align-items:start">
+
+      <!-- Info -->
+      <div>
+        <div class="detail-card">
+          <h3 style="font-family:var(--font-display);font-size:1.2rem;color:var(--crimson);margin-bottom:20px">Contact Information</h3>
+          <div style="display:flex;flex-direction:column;gap:20px">
+            <div style="display:flex;align-items:flex-start;gap:14px">
+              <div style="width:42px;height:42px;background:rgba(139,26,26,0.08);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">📍</div>
+              <div>
+                <div style="font-weight:600;margin-bottom:2px">Address</div>
+                <div style="font-size:0.88rem;color:var(--text-muted);line-height:1.6">ShaadiHall HQ<br>Station Road, Vijayapura<br>Karnataka — 586101</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:14px">
+              <div style="width:42px;height:42px;background:rgba(139,26,26,0.08);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">📞</div>
+              <div>
+                <div style="font-weight:600;margin-bottom:2px">Phone / WhatsApp</div>
+                <a href="tel:+919999999999" style="font-size:0.88rem;color:var(--crimson);font-weight:600">+91 99999 99999</a>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:14px">
+              <div style="width:42px;height:42px;background:rgba(139,26,26,0.08);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">✉️</div>
+              <div>
+                <div style="font-weight:600;margin-bottom:2px">Email</div>
+                <a href="mailto:hello@shaadihall.in" style="font-size:0.88rem;color:var(--crimson);font-weight:600">hello@shaadihall.in</a>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:14px">
+              <div style="width:42px;height:42px;background:rgba(139,26,26,0.08);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">🕐</div>
+              <div>
+                <div style="font-weight:600;margin-bottom:2px">Working Hours</div>
+                <div style="font-size:0.88rem;color:var(--text-muted)">Mon–Sat: 9:00 AM – 7:00 PM<br>Sunday: 10:00 AM – 4:00 PM</div>
+              </div>
+            </div>
+          </div>
+
+          <hr style="border:1px solid var(--cream-dk);margin:20px 0">
+
+          <div style="font-weight:600;margin-bottom:12px">For Vendors & Hall Owners</div>
+          <a href="vendor-login.html" class="btn btn-primary w-100" style="display:flex;justify-content:center;margin-bottom:10px">List Your Hall / Service →</a>
+          <p style="font-size:0.8rem;color:var(--text-muted);text-align:center">Or email us at <a href="mailto:vendor@shaadihall.in" style="color:var(--crimson)">vendor@shaadihall.in</a></p>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="detail-card">
+        <h3 style="font-family:var(--font-display);font-size:1.2rem;color:var(--crimson);margin-bottom:20px">Send Us a Message</h3>
+        <form onsubmit="submitContact(event)">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div class="form-group">
+              <label style="font-size:0.78rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:5px">Full Name *</label>
+              <input type="text" class="form-control" id="ct-name" placeholder="Your name" required>
+            </div>
+            <div class="form-group">
+              <label style="font-size:0.78rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:5px">Phone</label>
+              <input type="tel" class="form-control" id="ct-phone" placeholder="Mobile number">
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:12px">
+            <label style="font-size:0.78rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:5px">Email *</label>
+            <input type="email" class="form-control" id="ct-email" placeholder="your@email.com" required>
+          </div>
+          <div class="form-group" style="margin-top:12px">
+            <label style="font-size:0.78rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:5px">Subject</label>
+            <select class="form-control" id="ct-subject">
+              <option value="general">General Enquiry</option>
+              <option value="hall">Hall Booking Help</option>
+              <option value="vendor">Vendor Registration</option>
+              <option value="listing">List My Hall</option>
+              <option value="complaint">Complaint / Feedback</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-top:12px">
+            <label style="font-size:0.78rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:5px">Message *</label>
+            <textarea class="form-control" id="ct-message" rows="5" placeholder="How can we help you?…" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary w-100" style="margin-top:8px;display:flex;justify-content:center">Send Message →</button>
+          <p style="font-size:0.78rem;color:var(--text-muted);text-align:center;margin-top:10px">We typically respond within 24 hours</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0">
+      <span>© 2024 ShaadiHall — Made with ❤️ for Vijayapura</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+<script src="js/booking.js"></script>
+</body>
+</html>

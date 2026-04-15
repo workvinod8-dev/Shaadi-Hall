@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* ============================================================
+   SHAADI VENUE - Customer Panel Styles
+   ============================================================ */
+
+.customer-layout {
+  min-height: 100vh;
+  background: #FFFDF8; font-family: 'Poppins', sans-serif; color: #332018;
+}
+
+.customer-header {
+  background: white;
+  border-bottom: 1px solid #F2DFC0;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.customer-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.customer-tabs {
+  display: flex;
+  border-bottom: 2px solid #F2DFC0;
+  margin-bottom: 28px;
+}
+.customer-tab {
+  padding: 12px 24px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #8A6546;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+}
+.customer-tab.active {
+  color: #A63A11;
+  border-bottom-color: #A63A11;
+}
+
+.booking-item {
+  background: white;
+  border-radius: 12px;
+  padding: 20px 24px;
+  border: 1px solid #F2DFC0;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.booking-item-img {
+  width: 80px; height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.booking-info { flex: 1; }
+.booking-hall-name {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #332018;
+  margin-bottom: 4px;
+}
+
+.fav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 640px) {
+  .booking-item { flex-direction: column; align-items: flex-start; }
+  .fav-grid { grid-template-columns: 1fr; }
+}

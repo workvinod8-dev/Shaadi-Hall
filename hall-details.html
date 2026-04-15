@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hall Details — Shaadi Hall</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="loading-overlay" id="loading-overlay"><div class="loader"></div></div>
+
+<!-- Navbar -->
+<nav class="navbar" id="navbar" style="background:rgba(255,249,240,0.97);box-shadow:var(--shadow-sm)">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="logo-icon">🏛️</div><span>Shaadi<em style="font-style:italic;color:var(--gold)">Venue</em></span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="halls.html">Halls</a></li>
+      <li><a href="vendors.html">Vendors</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="customer-login.html" class="btn btn-primary btn-sm" id="nav-login-btn">Login</a>
+      <div id="nav-user-menu" style="display:none;align-items:center;gap:10px">
+        <a href="customer-dashboard.html" class="btn btn-gold btn-sm">My Account</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Hero / Breadcrumb -->
+<div class="page-hero" style="padding:100px 0 40px">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> › <a href="halls.html">Halls</a> › <span id="breadcrumb-name">Loading…</span></div>
+    <h1 class="page-hero-title" id="hall-name">Loading…</h1>
+    <p id="hall-locality" style="color:rgba(255,255,255,0.7);margin-top:6px;font-size:1rem"></p>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="container" style="padding-top:40px;padding-bottom:60px">
+  <div style="display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:start">
+
+    <!-- Left Column -->
+    <div>
+      <!-- Gallery -->
+      <div class="hall-gallery-main">
+        <img id="gallery-main-img" src="" alt="Hall" style="width:100%;height:100%;object-fit:cover" onerror="this.src='https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800'">
+      </div>
+      <div class="gallery-thumbs" id="gallery-thumbs"></div>
+
+      <!-- Description -->
+      <div class="detail-card" style="margin-top:24px">
+        <h3>About This Hall</h3>
+        <p id="hall-description" style="line-height:1.8;color:var(--text-muted)"></p>
+      </div>
+
+      <!-- Quick Info -->
+      <div class="detail-card">
+        <h3>Hall Details</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="amenity-item"><span class="amenity-icon">❄️</span> <div><small style="color:var(--text-muted)">AC Type</small><br><strong id="hall-ac"></strong></div></div>
+          <div class="amenity-item"><span class="amenity-icon">🏛️</span> <div><small style="color:var(--text-muted)">Venue Type</small><br><strong id="hall-type"></strong></div></div>
+          <div class="amenity-item"><span class="amenity-icon">🍽️</span> <div><small style="color:var(--text-muted)">Veg Policy</small><br><strong id="hall-veg"></strong></div></div>
+          <div class="amenity-item"><span class="amenity-icon">🛏️</span> <div><small style="color:var(--text-muted)">Rooms</small><br><strong id="hall-rooms"></strong></div></div>
+          <div class="amenity-item"><span class="amenity-icon">🍴</span> <div><small style="color:var(--text-muted)">Dining</small><br><strong id="hall-dining"></strong></div></div>
+          <div class="amenity-item"><span class="amenity-icon">🚗</span> <div><small style="color:var(--text-muted)">Parking</small><br><strong id="hall-parking"></strong></div></div>
+        </div>
+      </div>
+
+      <!-- Amenities -->
+      <div class="detail-card">
+        <h3>Amenities & Facilities</h3>
+        <div class="amenities-list" id="hall-amenities"></div>
+      </div>
+
+      <!-- Location -->
+      <div class="detail-card">
+        <h3>📍 Location</h3>
+        <p id="hall-address" style="color:var(--text-muted);margin-bottom:12px;line-height:1.6"></p>
+        <a id="maps-link" href="#" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
+          🗺️ View on Google Maps
+        </a>
+        <!-- Embedded map placeholder -->
+        <div style="margin-top:16px;background:var(--cream-dk);border-radius:var(--radius-md);height:200px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:0.9rem">
+          🗺️ Google Maps embed — add your Embed URL here
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column — Sticky Sidebar -->
+    <div style="position:sticky;top:80px">
+
+      <!-- Pricing Card -->
+      <div class="detail-card" style="background:linear-gradient(135deg,var(--crimson-dk),var(--dark-mid));color:white;margin-bottom:16px">
+        <h3 style="color:white;border-color:rgba(255,255,255,0.2)">Pricing</h3>
+        <div class="price-display">
+          <div class="price-num" id="hall-price" style="color:var(--gold-lt)"></div>
+          <div class="price-note" style="color:rgba(255,255,255,0.6)">per function / event</div>
+        </div>
+        <div style="text-align:center;margin-bottom:12px;color:rgba(255,255,255,0.7);font-size:0.85rem">
+          👥 Capacity: <strong id="hall-capacity" style="color:var(--gold-lt)"></strong>
+        </div>
+        <div style="text-align:center;color:rgba(255,255,255,0.6);font-size:0.82rem">
+          ⭐ Rating: <strong id="hall-rating" style="color:var(--gold-lt)"></strong>
+        </div>
+      </div>
+
+      <!-- Enquiry Form -->
+      <div class="detail-card" id="enquiry">
+        <h3>📩 Send Enquiry</h3>
+        <form id="enquiry-form" class="enquiry-form" onsubmit="submitEnquiry(event)">
+          <input type="hidden" id="enq-hall-id">
+          <input type="hidden" id="enq-hall-name">
+
+          <div class="form-group">
+            <label>Your Name *</label>
+            <input type="text" class="form-control" id="enq-name" placeholder="Full Name" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Phone *</label>
+              <input type="tel" class="form-control" id="enq-phone" placeholder="Mobile No." required>
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" class="form-control" id="enq-email" placeholder="Email">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Event Date *</label>
+              <input type="date" class="form-control" id="enq-date" required>
+            </div>
+            <div class="form-group">
+              <label>Guests</label>
+              <input type="number" class="form-control" id="enq-guests" placeholder="Est. guests" min="50">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Event Type</label>
+            <select class="form-control" id="enq-event-type">
+              <option value="wedding">Wedding / Kalyana</option>
+              <option value="reception">Reception</option>
+              <option value="engagement">Engagement</option>
+              <option value="birthday">Birthday</option>
+              <option value="corporate">Corporate</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea class="form-control" id="enq-message" rows="3" placeholder="Any special requirements…"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Send Enquiry →</button>
+          <p style="font-size:0.78rem;color:var(--text-muted);text-align:center;margin-top:10px">
+            We'll connect you with the hall within 24 hours
+          </p>
+        </form>
+      </div>
+
+      <!-- Back Button -->
+      <a href="halls.html" class="btn btn-outline w-100" style="display:flex;justify-content:center">← Back to All Halls</a>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0">
+      <span>© 2024 ShaadiHall</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+<script src="js/booking.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", loadHallDetail);
+
+  // Set minimum date for event date input
+  const dateInput = document.getElementById("enq-date");
+  if (dateInput) {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    dateInput.min = tomorrow.toISOString().split("T")[0];
+  }
+</script>
+</body>
+</html>

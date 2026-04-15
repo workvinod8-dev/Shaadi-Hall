@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Bookings — Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+<div class="admin-layout">
+
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🏛️</div>
+      <div><div class="sidebar-logo-text">ShaadiHall</div><div class="sidebar-logo-sub">Admin Panel</div></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Main</div>
+      <a href="admin-dashboard.html" class="sidebar-link"><span class="link-icon">📊</span> Dashboard</a>
+      <a href="admin-halls.html"     class="sidebar-link"><span class="link-icon">🏛️</span> Marriage Halls</a>
+      <a href="admin-vendors.html"   class="sidebar-link"><span class="link-icon">🎭</span> Vendors</a>
+      <a href="admin-bookings.html"  class="sidebar-link active"><span class="link-icon">📅</span> Bookings</a>
+      <a href="admin-users.html"     class="sidebar-link"><span class="link-icon">👥</span> Users</a>
+      <div class="sidebar-section-label" style="margin-top:12px">Settings</div>
+      <a href="index.html" class="sidebar-link" target="_blank"><span class="link-icon">🌐</span> View Website</a>
+      <a href="#" class="sidebar-link" onclick="AuthModule.logout()"><span class="link-icon">🚪</span> Logout</a>
+    </nav>
+    <div class="sidebar-footer" style="font-size:0.75rem;color:rgba(255,255,255,0.3)">Admin: <span id="admin-name" style="color:var(--admin-gold)">…</span></div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div class="topbar-title">📅 Bookings & Enquiries</div>
+      <div class="topbar-right">
+        <span style="font-size:0.82rem;color:var(--admin-muted)" id="bookings-count"></span>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- Tabs -->
+      <div style="display:flex;gap:0;margin-bottom:24px;background:var(--admin-card);border-radius:10px;padding:4px;border:1px solid var(--admin-border);width:fit-content">
+        <button class="btn-admin btn-admin-primary btn-admin-sm" id="tab-bookings" onclick="showTab('bookings')">📅 Bookings</button>
+        <button class="btn-admin btn-admin-secondary btn-admin-sm" id="tab-enquiries" onclick="showTab('enquiries')" style="margin-left:4px">✉️ Enquiries</button>
+      </div>
+
+      <!-- Bookings Table -->
+      <div id="panel-bookings">
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">All Bookings</div>
+            <div class="table-actions">
+              <div class="search-wrap">
+                <input type="text" class="search-input" placeholder="Search…" oninput="filterTableRows('bookings-table-body', this.value)">
+              </div>
+              <select class="filter-select" onchange="filterByStatus('bookings-table-body', this.value)" style="font-size:0.82rem;padding:8px 12px;border:1.5px solid var(--admin-border);border-radius:8px;background:var(--admin-bg)">
+                <option value="">All Statuses</option>
+                <option value="pending">Pending</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Hall</th>
+                  <th>Event Date</th>
+                  <th>Event Type</th>
+                  <th>Guests</th>
+                  <th>Submitted</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="bookings-table-body">
+                <tr><td colspan="8" style="text-align:center;padding:30px"><div class="loader" style="margin:auto"></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enquiries Table -->
+      <div id="panel-enquiries" style="display:none">
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">All Enquiries</div>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Hall</th>
+                  <th>Event Date</th>
+                  <th>Message</th>
+                  <th>Received</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="enquiries-table-body">
+                <tr><td colspan="7" style="text-align:center;padding:30px"><div class="loader" style="margin:auto"></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+<script src="js/admin.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    await initAdmin();
+    loadAdminBookings();
+    loadAdminEnquiries();
+    hideLoading();
+  });
+
+  function showTab(tab) {
+    document.getElementById("panel-bookings").style.display  = tab === "bookings"  ? "" : "none";
+    document.getElementById("panel-enquiries").style.display = tab === "enquiries" ? "" : "none";
+    document.getElementById("tab-bookings").className  = "btn-admin btn-admin-sm " + (tab === "bookings"  ? "btn-admin-primary" : "btn-admin-secondary");
+    document.getElementById("tab-enquiries").className = "btn-admin btn-admin-sm " + (tab === "enquiries" ? "btn-admin-primary" : "btn-admin-secondary");
+  }
+
+  function filterTableRows(tbodyId, q) {
+    document.querySelectorAll(`#${tbodyId} tr`).forEach(row => {
+      row.style.display = row.textContent.toLowerCase().includes(q.toLowerCase()) ? "" : "none";
+    });
+  }
+
+  function filterByStatus(tbodyId, status) {
+    document.querySelectorAll(`#${tbodyId} tr`).forEach(row => {
+      if (!status) { row.style.display = ""; return; }
+      row.style.display = row.textContent.toLowerCase().includes(status) ? "" : "none";
+    });
+  }
+
+  async function loadAdminBookings() {
+    const tbody = document.getElementById("bookings-table-body");
+    const snap  = await db.collection("bookings").orderBy("createdAt","desc").limit(100).get();
+    const countEl = document.getElementById("bookings-count");
+    if (countEl) countEl.textContent = `${snap.size} total bookings`;
+    if (snap.empty) { tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--admin-muted)">No bookings yet</td></tr>`; return; }
+    tbody.innerHTML = "";
+    snap.forEach(doc => {
+      const b = doc.data();
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><strong>${b.customerName}</strong><br><small style="color:var(--admin-muted)">${b.phone}</small></td>
+        <td style="max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${b.hallName}</td>
+        <td>${b.eventDate || "—"}</td>
+        <td>${b.eventType || "—"}</td>
+        <td>${b.guestCount || "—"}</td>
+        <td style="font-size:0.8rem;color:var(--admin-muted)">${b.createdAt ? new Date(b.createdAt.seconds*1000).toLocaleDateString("en-IN") : "—"}</td>
+        <td><span class="status-badge status-${b.status}">${b.status}</span></td>
+        <td>
+          <button class="action-btn view"   onclick="updateBookingStatus('${doc.id}','confirmed')" title="Confirm">✅</button>
+          <button class="action-btn delete" onclick="updateBookingStatus('${doc.id}','cancelled')" title="Cancel">❌</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  async function loadAdminEnquiries() {
+    const tbody = document.getElementById("enquiries-table-body");
+    const snap  = await db.collection("enquiries").orderBy("createdAt","desc").limit(100).get();
+    if (snap.empty) { tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--admin-muted)">No enquiries yet</td></tr>`; return; }
+    tbody.innerHTML = "";
+    snap.forEach(doc => {
+      const e = doc.data();
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><strong>${e.customerName}</strong></td>
+        <td>${e.phone}</td>
+        <td style="max-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.hallName || "—"}</td>
+        <td>${e.eventDate || "—"}</td>
+        <td style="max-width:160px;font-size:0.82rem;color:var(--admin-muted)">${(e.message||"").slice(0,60)}…</td>
+        <td style="font-size:0.8rem;color:var(--admin-muted)">${e.createdAt ? new Date(e.createdAt.seconds*1000).toLocaleDateString("en-IN") : "—"}</td>
+        <td>
+          <span class="status-badge status-${e.status === "new" ? "pending" : "active"}">${e.status}</span>
+          <button class="action-btn view" onclick="markEnquiryRead('${doc.id}')" title="Mark Read" style="margin-left:4px">👁️</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  async function markEnquiryRead(id) {
+    await db.collection("enquiries").doc(id).update({ status: "read" });
+    showToast("Marked as read");
+    loadAdminEnquiries();
+  }
+</script>
+</body>
+</html>

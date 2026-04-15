@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wedding Vendors in Vijayapura — Shaadi Hall</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="loading-overlay" id="loading-overlay"><div class="loader"></div></div>
+
+<nav class="navbar" id="navbar" style="background:rgba(255,249,240,0.97);box-shadow:var(--shadow-sm)">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="logo-icon">🏛️</div><span>Shaadi<em style="font-style:italic;color:var(--gold)">Venue</em></span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="halls.html">Halls</a></li>
+      <li><a href="vendors.html" style="color:var(--crimson)">Vendors</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="customer-login.html" class="btn btn-primary btn-sm" id="nav-login-btn">Login</a>
+      <div id="nav-user-menu" style="display:none;align-items:center;gap:10px">
+        <a href="customer-dashboard.html" class="btn btn-gold btn-sm">My Account</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> › <span>Vendors</span></div>
+    <h1 class="page-hero-title">Wedding Vendors</h1>
+    <p style="color:rgba(255,255,255,0.7);margin-top:0.5rem">Trusted wedding service providers in Vijayapura</p>
+  </div>
+</div>
+
+<div class="container" style="padding-top:40px;padding-bottom:60px">
+
+  <!-- Category Tabs -->
+  <div class="category-tabs">
+    <button class="cat-tab active" data-category="">All Vendors</button>
+    <button class="cat-tab" data-category="catering">🍽️ Catering</button>
+    <button class="cat-tab" data-category="decoration">💐 Decoration</button>
+    <button class="cat-tab" data-category="photography">📸 Photography</button>
+    <button class="cat-tab" data-category="makeup">💄 Makeup</button>
+    <button class="cat-tab" data-category="mehendi">🌿 Mehendi</button>
+    <button class="cat-tab" data-category="dj">🎧 DJ & Sound</button>
+    <button class="cat-tab" data-category="flower">🌸 Flowers</button>
+    <button class="cat-tab" data-category="events">🎪 Event Planners</button>
+  </div>
+
+  <!-- Vendors Grid -->
+  <div class="vendors-grid" id="vendors-grid">
+    <div style="grid-column:1/-1;text-align:center;padding:40px"><div class="loader" style="margin:auto"></div></div>
+  </div>
+
+  <!-- CTA for vendors -->
+  <div class="cta-card" style="margin-top:60px;text-align:center">
+    <div style="position:relative;z-index:1">
+      <h2>Are You a Wedding Vendor?</h2>
+      <p>Join ShaadiHall and connect with thousands of couples planning their wedding in Vijayapura and surrounding areas.</p>
+      <a href="vendor-login.html" class="btn btn-gold btn-lg">Register as Vendor →</a>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0">
+      <span>© 2024 ShaadiHall. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+<script src="js/vendors.js"></script>
+<script>
+  // Check URL param for category
+  document.addEventListener("DOMContentLoaded", () => {
+    const cat = new URLSearchParams(window.location.search).get("cat");
+    if (cat) {
+      document.querySelectorAll(".cat-tab").forEach(t => {
+        t.classList.toggle("active", t.dataset.category === cat);
+      });
+      loadVendors(cat);
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marriage Halls in Vijayapura — Shaadi Hall</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="loading-overlay" id="loading-overlay"><div class="loader"></div></div>
+
+<!-- Navbar -->
+<nav class="navbar" id="navbar" style="background:rgba(255,249,240,0.97);box-shadow:var(--shadow-sm)">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon">🏛️</div>
+      <span>Shaadi<em style="font-style:italic;color:var(--gold)">Venue</em></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="halls.html" style="color:var(--crimson)">Halls</a></li>
+      <li><a href="vendors.html">Vendors</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="customer-login.html" class="btn btn-primary btn-sm" id="nav-login-btn">Login</a>
+      <div id="nav-user-menu" style="display:none;align-items:center;gap:10px">
+        <a href="customer-dashboard.html" class="btn btn-gold btn-sm">My Account</a>
+      </div>
+    </div>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<div class="mobile-nav" id="mobile-nav">
+  <div class="mobile-nav-backdrop"></div>
+  <div class="mobile-nav-drawer">
+    <button class="mobile-nav-close">✕</button>
+    <div class="mobile-nav-links">
+      <a href="index.html">🏠 Home</a>
+      <a href="halls.html">🏛️ Halls</a>
+      <a href="vendors.html">🎭 Vendors</a>
+      <a href="contact.html">📞 Contact</a>
+      <a href="customer-login.html">🔐 Login</a>
+    </div>
+  </div>
+</div>
+
+<!-- Page Hero -->
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> › <span>Marriage Halls</span></div>
+    <h1 class="page-hero-title">Marriage Halls</h1>
+    <p style="color:rgba(255,255,255,0.7);margin-top:0.5rem">
+      Showing <strong id="halls-count" style="color:var(--gold-lt)">…</strong> venues in Vijayapura
+    </p>
+  </div>
+</div>
+
+<div class="container" style="padding-top:32px;padding-bottom:60px">
+
+  <!-- Filters Bar -->
+  <div class="filters-bar">
+    <div class="filter-group" style="flex:1;min-width:180px">
+      <input type="text" id="search-query" class="form-control" placeholder="🔍 Search halls…" style="padding:8px 14px">
+    </div>
+    <div class="filter-group">
+      <label>City</label>
+      <select class="filter-select" id="filter-city">
+        <option value="">All Cities</option>
+        <option value="Vijayapura">Vijayapura</option>
+        <option value="Bagalkot">Bagalkot</option>
+        <option value="Bidar">Bidar</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>AC</label>
+      <select class="filter-select" id="filter-ac">
+        <option value="">All</option>
+        <option value="ac">AC Only</option>
+        <option value="nonac">Non-AC</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Max Price</label>
+      <select class="filter-select" id="filter-price">
+        <option value="">Any</option>
+        <option value="50000">Under ₹50,000</option>
+        <option value="75000">Under ₹75,000</option>
+        <option value="100000">Under ₹1 Lakh</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Min Capacity</label>
+      <select class="filter-select" id="filter-cap">
+        <option value="">Any</option>
+        <option value="200">200+</option>
+        <option value="500">500+</option>
+        <option value="1000">1000+</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Sort By</label>
+      <select class="filter-select" id="sort-by">
+        <option value="featured">Featured First</option>
+        <option value="rating">Top Rated</option>
+        <option value="price-asc">Price: Low → High</option>
+        <option value="price-desc">Price: High → Low</option>
+        <option value="cap-desc">Capacity: Largest</option>
+      </select>
+    </div>
+    <button class="btn btn-primary btn-sm" id="filter-btn">Apply</button>
+    <button class="btn btn-outline btn-sm" id="reset-btn">Reset</button>
+  </div>
+
+  <!-- Halls Grid -->
+  <div class="halls-grid" id="halls-grid">
+    <div style="grid-column:1/-1;text-align:center;padding:40px"><div class="loader" style="margin:auto"></div></div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0">
+      <span>© 2024 ShaadiHall</span>
+      <div style="display:flex;gap:20px">
+        <a href="index.html" style="color:rgba(255,255,255,0.4)">Home</a>
+        <a href="vendors.html" style="color:rgba(255,255,255,0.4)">Vendors</a>
+        <a href="contact.html" style="color:rgba(255,255,255,0.4)">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+<script src="js/halls.js"></script>
+
+<script>
+  // Pre-fill from URL params
+  document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("city")) document.getElementById("filter-city").value = params.get("city");
+    if (params.get("cap"))  document.getElementById("filter-cap").value  = params.get("cap");
+  });
+</script>
+</body>
+</html>

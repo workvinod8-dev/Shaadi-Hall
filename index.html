@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shaadi Hall — Find Marriage Halls in Vijayapura</title>
+  <meta name="description" content="Discover the finest marriage halls and wedding vendors in Vijayapura, Karnataka. Book your dream venue today.">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loading-overlay"><div class="loader"></div></div>
+
+<!-- ── Navbar ── -->
+<nav class="navbar nav-transparent" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon">🏛️</div>
+      <span>Shaadi<em style="font-style:italic;color:var(--gold-lt)">Venue</em></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="halls.html">Halls</a></li>
+      <li><a href="vendors.html">Vendors</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="customer-login.html" class="btn btn-outline-white btn-sm" id="nav-login-btn">Login / Register</a>
+      <div id="nav-user-menu" style="display:none;align-items:center;gap:10px">
+        <span id="nav-user-name" style="font-size:0.88rem;color:var(--gold-lt)"></span>
+        <a href="customer-dashboard.html" class="btn btn-gold btn-sm">My Account</a>
+      </div>
+    </div>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobile-nav">
+  <div class="mobile-nav-backdrop"></div>
+  <div class="mobile-nav-drawer">
+    <button class="mobile-nav-close">✕</button>
+    <div class="mobile-nav-links">
+      <a href="index.html">🏠 Home</a>
+      <a href="halls.html">🏛️ Marriage Halls</a>
+      <a href="vendors.html">🎭 Vendors</a>
+      <a href="about.html">ℹ️ About</a>
+      <a href="contact.html">📞 Contact</a>
+      <a href="customer-login.html">🔐 Login / Register</a>
+    </div>
+    <div style="margin-top:auto;padding-top:20px;border-top:1px solid var(--cream-dk);font-size:0.8rem;color:var(--text-muted)">
+      <a href="admin-login.html" style="color:var(--text-muted)">Admin</a> ·
+      <a href="vendor-login.html" style="color:var(--text-muted)">Vendor Portal</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-pattern"></div>
+  <!-- Decorative flower motifs -->
+  <div style="position:absolute;right:-80px;top:10%;font-size:300px;opacity:0.03;pointer-events:none">🌸</div>
+  <div style="position:absolute;left:-60px;bottom:10%;font-size:240px;opacity:0.03;pointer-events:none">🌺</div>
+
+  <div class="hero-content">
+    <div class="hero-badge">🎊 Vijayapura's #1 Wedding Venue Platform</div>
+    <h1 class="hero-title">
+      Your Perfect<br>Wedding Venue<br>
+      <em>Awaits You</em>
+    </h1>
+    <p class="hero-subtitle">
+      Discover handpicked marriage halls and trusted wedding vendors in Vijayapura, Karnataka. From intimate ceremonies to grand celebrations — find it all here.
+    </p>
+    <div class="hero-actions">
+      <a href="halls.html" class="btn btn-gold btn-lg">🏛️ Explore Halls</a>
+      <a href="vendors.html" class="btn btn-outline-white btn-lg">🎭 Find Vendors</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="num">12+</span><span class="lbl">Marriage Halls</span></div>
+      <div class="hero-stat"><span class="num">50+</span><span class="lbl">Happy Weddings</span></div>
+      <div class="hero-stat"><span class="num">6+</span><span class="lbl">Vendor Categories</span></div>
+      <div class="hero-stat"><span class="num">4.8★</span><span class="lbl">Avg Rating</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Search Section ── -->
+<div class="container" style="position:relative;z-index:5">
+  <div class="search-section">
+    <div class="search-title">🔍 Find Your Perfect Hall</div>
+    <div class="search-form">
+      <div class="form-group">
+        <label>City</label>
+        <select class="form-control" id="hero-city">
+          <option value="Vijayapura">Vijayapura</option>
+          <option value="Bagalkot">Bagalkot</option>
+          <option value="Bidar">Bidar</option>
+          <option value="Dharwad">Dharwad</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Event Type</label>
+        <select class="form-control" id="hero-event">
+          <option value="">All Events</option>
+          <option value="wedding">Wedding / Kalyana</option>
+          <option value="reception">Reception</option>
+          <option value="engagement">Engagement</option>
+          <option value="birthday">Birthday</option>
+          <option value="corporate">Corporate</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Guest Count</label>
+        <select class="form-control" id="hero-guests">
+          <option value="">Any</option>
+          <option value="200">Up to 200</option>
+          <option value="500">Up to 500</option>
+          <option value="1000">Up to 1000</option>
+          <option value="1500">1000+ guests</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="heroSearch()">Search Halls</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Features ── -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <p class="section-subtitle">Why Choose Us</p>
+      <h2 class="section-title">Everything for Your Perfect Wedding</h2>
+      <div class="gold-divider"></div>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">🏛️</div>
+        <h3 class="feature-title">Verified Venues</h3>
+        <p class="feature-desc">Every hall is personally verified for quality, amenities and authenticity before listing.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">💰</div>
+        <h3 class="feature-title">Best Prices</h3>
+        <p class="feature-desc">Compare prices across venues and find the best deal for your budget without hidden charges.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📸</div>
+        <h3 class="feature-title">Real Photos</h3>
+        <p class="feature-desc">View actual photos of the halls — no stock images, no surprises on your big day.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">⚡</div>
+        <h3 class="feature-title">Instant Enquiry</h3>
+        <p class="feature-desc">Send enquiries directly to hall owners and get responses within hours — not days.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🎭</div>
+        <h3 class="feature-title">All Vendors</h3>
+        <p class="feature-desc">Find caterers, decorators, photographers, mehendi artists and more — all in one place.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">⭐</div>
+        <h3 class="feature-title">Trusted Reviews</h3>
+        <p class="feature-desc">Real reviews from real couples who have celebrated at these venues.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Featured Halls ── -->
+<section class="section-alt">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-subtitle">Top Picks</p>
+      <h2 class="section-title">Featured Marriage Halls</h2>
+      <div class="gold-divider"></div>
+      <p class="section-subtitle" style="margin-top:0.5rem">Handpicked premium venues in Vijayapura</p>
+    </div>
+    <div class="halls-grid" id="featured-halls-grid">
+      <!-- Loaded via JS -->
+      <div style="grid-column:1/-1;text-align:center;padding:40px"><div class="loader" style="margin:auto"></div></div>
+    </div>
+    <div class="text-center mt-3">
+      <a href="halls.html" class="btn btn-primary btn-lg">View All Halls →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Vendor Categories ── -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <p class="section-subtitle">Wedding Services</p>
+      <h2 class="section-title">Our Vendor Categories</h2>
+      <div class="gold-divider"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:16px;margin-bottom:2.5rem">
+      <a href="vendors.html?cat=catering" class="feature-card" style="text-decoration:none">
+        <div class="feature-icon">🍽️</div>
+        <h3 class="feature-title" style="font-size:0.9rem">Catering</h3>
+      </a>
+      <a href="vendors.html?cat=decoration" class="feature-card" style="text-decoration:none">
+        <div class="feature-icon">💐</div>
+        <h3 class="feature-title" style="font-size:0.9rem">Decoration</h3>
+      </a>
+      <a href="vendors.html?cat=photography" class="feature-card" style="text-decoration:none">
+        <div class="feature-icon">📸</div>
+        <h3 class="feature-title" style="font-size:0.9rem">Photography</h3>
+      </a>
+      <a href="vendors.html?cat=makeup" class="feature-card" style="text-decoration:none">
+        <div class="feature-icon">💄</div>
+        <h3 class="feature-title" style="font-size:0.9rem">Makeup</h3>
+      </a>
+      <a href="vendors.html?cat=mehendi" class="feature-card" style="text-decoration:none">
+        <div class="feature-icon">🌿</div>
+        <h3 class="feature-title" style="font-size:0.9rem">Mehendi</h3>
+      </a>
+      <a href="vendors.html?cat=dj" class="feature-card" style="text-decoration:none">
+        <div class="feature-icon">🎧</div>
+        <h3 class="feature-title" style="font-size:0.9rem">DJ & Sound</h3>
+      </a>
+      <a href="vendors.html?cat=flower" class="feature-card" style="text-decoration:none">
+        <div class="feature-icon">🌸</div>
+        <h3 class="feature-title" style="font-size:0.9rem">Flowers</h3>
+      </a>
+      <a href="vendors.html?cat=events" class="feature-card" style="text-decoration:none">
+        <div class="feature-icon">🎪</div>
+        <h3 class="feature-title" style="font-size:0.9rem">Event Planners</h3>
+      </a>
+    </div>
+    <div class="text-center">
+      <a href="vendors.html" class="btn btn-outline btn-lg">View All Vendors →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Popular Halls ── -->
+<section class="section-alt">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-subtitle">All Venues in Vijayapura</p>
+      <h2 class="section-title">Popular Marriage Halls</h2>
+      <div class="gold-divider"></div>
+    </div>
+    <div class="halls-grid" id="popular-halls-grid">
+      <div style="grid-column:1/-1;text-align:center;padding:40px"><div class="loader" style="margin:auto"></div></div>
+    </div>
+    <div class="text-center mt-3">
+      <a href="halls.html" class="btn btn-primary btn-lg">Browse All 12 Halls →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA - Hall Owner ── -->
+<section>
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:stretch" class="cta-grid">
+      <div class="cta-card">
+        <div style="position:relative;z-index:1">
+          <div style="font-size:3rem;margin-bottom:16px">🏛️</div>
+          <h2>List Your Marriage Hall</h2>
+          <p>Are you a hall owner? List your venue on Shaadi Hall and reach thousands of couples planning their wedding in Vijayapura.</p>
+          <a href="vendor-login.html" class="btn btn-gold btn-lg">List Your Hall →</a>
+        </div>
+      </div>
+      <div class="cta-card" style="background:linear-gradient(135deg,#2D4A1E,#1A2E0F)">
+        <div style="position:relative;z-index:1">
+          <div style="font-size:3rem;margin-bottom:16px">🎭</div>
+          <h2>Join as a Vendor</h2>
+          <p>Caterers, decorators, photographers and more — register your wedding service and grow your business with us.</p>
+          <a href="vendor-login.html" class="btn btn-gold btn-lg">Register as Vendor →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Testimonials ── -->
+<section class="section-alt">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-subtitle">Happy Couples</p>
+      <h2 class="section-title">What Our Customers Say</h2>
+      <div class="gold-divider"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px">
+      <div class="testimonial-card reveal">
+        <p class="testimonial-text">We found Adil Shahi Marriage Hall through Shaadi Hall and it was absolutely perfect for our nikah ceremony. The enquiry process was so simple and the hall management was very responsive.</p>
+        <div class="testimonial-author">
+          <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--crimson),var(--gold));display:flex;align-items:center;justify-content:center;color:white;font-weight:700">R</div>
+          <div>
+            <div class="testimonial-name">Rajesh & Kavya</div>
+            <div class="testimonial-detail">Married at Adil Shahi Hall, March 2024</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <p class="testimonial-text">The platform made it so easy to compare multiple halls at once. We booked Patil Conventional Hall and had an amazing wedding with 1000+ guests. Highly recommend!</p>
+        <div class="testimonial-author">
+          <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--crimson),var(--gold));display:flex;align-items:center;justify-content:center;color:white;font-weight:700">S</div>
+          <div>
+            <div class="testimonial-name">Suresh & Deepa</div>
+            <div class="testimonial-detail">Married at Patil Hall, January 2024</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <p class="testimonial-text">Found our caterer and photographer through Shaadi Hall as well! Everything came together beautifully. This platform is a lifesaver for Vijayapura weddings.</p>
+        <div class="testimonial-author">
+          <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--crimson),var(--gold));display:flex;align-items:center;justify-content:center;color:white;font-weight:700">A</div>
+          <div>
+            <div class="testimonial-name">Aditya & Priya</div>
+            <div class="testimonial-detail">Married at Jannat Hall, February 2024</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <div class="logo-icon" style="width:32px;height:32px;background:linear-gradient(135deg,var(--crimson),var(--gold));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem">🏛️</div>
+          ShaadiHall
+        </div>
+        <p class="footer-desc">Vijayapura's trusted marriage hall and wedding vendor discovery platform. Find, compare and book your perfect wedding venue with ease.</p>
+        <div class="social-links">
+          <a href="#" class="social-btn">📘</a>
+          <a href="#" class="social-btn">📸</a>
+          <a href="#" class="social-btn">🐦</a>
+          <a href="#" class="social-btn">▶️</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Quick Links</div>
+        <div class="footer-links">
+          <a href="halls.html">Marriage Halls</a>
+          <a href="vendors.html">Wedding Vendors</a>
+          <a href="about.html">About Us</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">For Business</div>
+        <div class="footer-links">
+          <a href="vendor-login.html">Vendor Portal</a>
+          <a href="vendor-login.html">List Your Hall</a>
+          <a href="admin-login.html">Admin Login</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Contact Us</div>
+        <div class="footer-links">
+          <a href="tel:+919999999999">📞 +91 99999 99999</a>
+          <a href="mailto:hello@shaadihall.in">✉️ hello@shaadihall.in</a>
+          <a href="#">📍 Vijayapura, Karnataka</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 ShaadiHall. All rights reserved.</span>
+      <span>Made with ❤️ for Vijayapura</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ── Firebase SDKs ── -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+
+<script>
+  function heroSearch() {
+    const city   = document.getElementById("hero-city").value;
+    const guests = document.getElementById("hero-guests").value;
+    let url = `halls.html?city=${encodeURIComponent(city)}`;
+    if (guests) url += `&cap=${guests}`;
+    window.location.href = url;
+  }
+
+  // Load Featured Halls
+  async function loadFeaturedHalls() {
+    const grid = document.getElementById("featured-halls-grid");
+    try {
+      const snap = await db.collection("halls").where("isFeatured", "==", true).limit(3).get();
+      if (snap.empty) { grid.innerHTML = "<p style='text-align:center;color:var(--text-muted)'>No featured halls yet. <a href='#' onclick='seedData()'>Seed sample data</a></p>"; return; }
+      grid.innerHTML = snap.docs.map(d => hallCardHTML(d.data(), d.id)).join("");
+      initScrollReveal();
+    } catch(e) { grid.innerHTML = `<p style='text-align:center;color:red'>${e.message}</p>`; }
+  }
+
+  // Load Popular Halls
+  async function loadPopularHalls() {
+    const grid = document.getElementById("popular-halls-grid");
+    try {
+      const snap = await db.collection("halls").orderBy("rating","desc").limit(6).get();
+      if (snap.empty) { grid.innerHTML = "<p style='text-align:center;color:var(--text-muted)'>No halls found. Run seedData() from browser console.</p>"; return; }
+      grid.innerHTML = snap.docs.map(d => hallCardHTML(d.data(), d.id)).join("");
+      initScrollReveal();
+    } catch(e) { grid.innerHTML = `<p style='text-align:center;color:red'>${e.message}</p>`; }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    loadFeaturedHalls();
+    loadPopularHalls();
+  });
+</script>
+
+<!-- Seed data (only needed once) -->
+<script src="js/seed-data.js"></script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Halls — Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+<div class="admin-layout">
+
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🏛️</div>
+      <div><div class="sidebar-logo-text">ShaadiHall</div><div class="sidebar-logo-sub">Admin Panel</div></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Main</div>
+      <a href="admin-dashboard.html" class="sidebar-link"><span class="link-icon">📊</span> Dashboard</a>
+      <a href="admin-halls.html"     class="sidebar-link active"><span class="link-icon">🏛️</span> Marriage Halls</a>
+      <a href="admin-vendors.html"   class="sidebar-link"><span class="link-icon">🎭</span> Vendors</a>
+      <a href="admin-bookings.html"  class="sidebar-link"><span class="link-icon">📅</span> Bookings</a>
+      <a href="admin-users.html"     class="sidebar-link"><span class="link-icon">👥</span> Users</a>
+      <div class="sidebar-section-label" style="margin-top:12px">Settings</div>
+      <a href="index.html" class="sidebar-link" target="_blank"><span class="link-icon">🌐</span> View Website</a>
+      <a href="#" class="sidebar-link" onclick="AuthModule.logout()"><span class="link-icon">🚪</span> Logout</a>
+    </nav>
+    <div class="sidebar-footer" style="font-size:0.75rem;color:rgba(255,255,255,0.3)">Admin: <span id="admin-name" style="color:var(--admin-gold)">…</span></div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div class="topbar-title">🏛️ Manage Marriage Halls</div>
+      <div class="topbar-right">
+        <button class="btn-admin btn-admin-primary" onclick="openHallModal()">➕ Add New Hall</button>
+      </div>
+    </div>
+
+    <div class="admin-content">
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">All Halls</div>
+          <div class="table-actions">
+            <div class="search-wrap">
+              <input type="text" class="search-input" id="hall-search" placeholder="Search halls…" oninput="filterHallsTable(this.value)">
+            </div>
+            <button class="btn-admin btn-admin-primary btn-admin-sm" onclick="openHallModal()">➕ Add Hall</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Photo</th>
+                <th>Hall Name</th>
+                <th>Location</th>
+                <th>Price</th>
+                <th>Capacity</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="halls-table-body">
+              <tr><td colspan="7" style="text-align:center;padding:30px"><div class="loader" style="margin:auto"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ── Add / Edit Hall Modal ── -->
+<div class="modal-overlay" id="hall-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="hall-modal-title">Add New Hall</div>
+      <button class="modal-close" onclick="closeHallModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="hall-form" class="admin-form" onsubmit="saveHall(event)">
+        <input type="hidden" id="hall-form-id">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Hall Name *</label>
+            <input type="text" class="form-control" id="hf-name" placeholder="e.g. Patil Conventional Hall" required>
+          </div>
+          <div class="form-group">
+            <label>City *</label>
+            <select class="form-control" id="hf-city">
+              <option value="Vijayapura">Vijayapura</option>
+              <option value="Bagalkot">Bagalkot</option>
+              <option value="Bidar">Bidar</option>
+              <option value="Dharwad">Dharwad</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Locality / Area *</label>
+            <input type="text" class="form-control" id="hf-locality" placeholder="e.g. Station Road" required>
+          </div>
+          <div class="form-group">
+            <label>Price per Function (₹) *</label>
+            <input type="number" class="form-control" id="hf-price" placeholder="75000" min="0" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Full Address *</label>
+          <input type="text" class="form-control" id="hf-address" placeholder="Plot No., Street, Vijayapura" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Capacity (persons) *</label>
+            <input type="number" class="form-control" id="hf-capacity" placeholder="1000" min="50" required>
+          </div>
+          <div class="form-group">
+            <label>Number of Rooms</label>
+            <input type="number" class="form-control" id="hf-rooms" placeholder="5" min="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description *</label>
+          <textarea class="form-control" id="hf-description" rows="3" placeholder="Describe the hall…" required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Amenities (comma-separated)</label>
+          <input type="text" class="form-control" id="hf-amenities" placeholder="Air Conditioning, Parking, Bridal Room, Stage…">
+        </div>
+        <div class="form-group">
+          <label>Cover Image URL</label>
+          <input type="url" class="form-control" id="hf-cover" placeholder="https://…">
+        </div>
+        <div class="form-group">
+          <label>Gallery Image URLs (one per line)</label>
+          <textarea class="form-control" id="hf-gallery" rows="3" placeholder="https://image1.jpg&#10;https://image2.jpg"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Google Maps Link</label>
+          <input type="url" class="form-control" id="hf-maps" placeholder="https://maps.google.com/…">
+        </div>
+
+        <!-- Checkboxes -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.88rem">
+            <input type="checkbox" id="hf-featured"> ⭐ Featured Hall
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.88rem">
+            <input type="checkbox" id="hf-available" checked> ✅ Available
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.88rem">
+            <input type="checkbox" id="hf-ac"> ❄️ Air Conditioned
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.88rem">
+            <input type="checkbox" id="hf-parking"> 🚗 Parking
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.88rem">
+            <input type="checkbox" id="hf-dining"> 🍽️ Dining Hall
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.88rem">
+            <input type="checkbox" id="hf-indoor"> 🏛️ Indoor Venue
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.88rem">
+            <input type="checkbox" id="hf-veg"> 🥗 Veg Only
+          </label>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-admin btn-admin-secondary" onclick="closeHallModal()">Cancel</button>
+      <button class="btn-admin btn-admin-primary" onclick="document.getElementById('hall-form').dispatchEvent(new Event('submit',{cancelable:true,bubbles:true}))">Save Hall</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+<script src="js/admin.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    await initAdmin();
+    loadAdminHalls();
+    hideLoading();
+  });
+
+  function filterHallsTable(query) {
+    const rows = document.querySelectorAll("#halls-table-body tr");
+    const q = query.toLowerCase();
+    rows.forEach(row => {
+      row.style.display = row.textContent.toLowerCase().includes(q) ? "" : "none";
+    });
+  }
+
+  // Extended saveHall to include new fields
+  const _origSaveHall = saveHall;
+  async function saveHall(event) {
+    event.preventDefault();
+    const hallId = document.getElementById("hall-form-id").value;
+    const galleryRaw = document.getElementById("hf-gallery").value;
+    const gallery = galleryRaw.split("\n").map(s => s.trim()).filter(Boolean);
+    const data = {
+      name:        document.getElementById("hf-name").value.trim(),
+      city:        document.getElementById("hf-city").value,
+      locality:    document.getElementById("hf-locality").value.trim(),
+      address:     document.getElementById("hf-address").value.trim(),
+      price:       parseInt(document.getElementById("hf-price").value) || 0,
+      capacity:    parseInt(document.getElementById("hf-capacity").value) || 0,
+      roomsCount:  parseInt(document.getElementById("hf-rooms").value) || 0,
+      description: document.getElementById("hf-description").value.trim(),
+      amenities:   document.getElementById("hf-amenities").value.split(",").map(s => s.trim()).filter(Boolean),
+      coverImage:  document.getElementById("hf-cover").value.trim(),
+      gallery,
+      mapsLink:    document.getElementById("hf-maps").value.trim(),
+      isFeatured:  document.getElementById("hf-featured").checked,
+      isAvailable: document.getElementById("hf-available").checked,
+      isAC:        document.getElementById("hf-ac").checked,
+      hasParking:  document.getElementById("hf-parking").checked,
+      hasDining:   document.getElementById("hf-dining").checked,
+      isIndoor:    document.getElementById("hf-indoor").checked,
+      isVeg:       document.getElementById("hf-veg").checked,
+      updatedAt:   firebase.firestore.FieldValue.serverTimestamp()
+    };
+    try {
+      if (hallId) {
+        await db.collection("halls").doc(hallId).update(data);
+        showToast("Hall updated ✅");
+      } else {
+        data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+        data.rating = 0; data.reviewCount = 0;
+        await db.collection("halls").add(data);
+        showToast("Hall added ✅");
+      }
+      closeHallModal();
+      loadAdminHalls();
+    } catch(err) { showToast("Error: " + err.message, "error"); }
+  }
+
+  // Override editHall to populate extra fields
+  async function editHall(hallId) {
+    const doc = await db.collection("halls").doc(hallId).get();
+    if (!doc.exists) return;
+    const h = doc.data();
+    document.getElementById("hf-name").value        = h.name || "";
+    document.getElementById("hf-city").value        = h.city || "Vijayapura";
+    document.getElementById("hf-locality").value    = h.locality || "";
+    document.getElementById("hf-address").value     = h.address || "";
+    document.getElementById("hf-price").value       = h.price || "";
+    document.getElementById("hf-capacity").value    = h.capacity || "";
+    document.getElementById("hf-rooms").value       = h.roomsCount || "";
+    document.getElementById("hf-description").value = h.description || "";
+    document.getElementById("hf-amenities").value   = (h.amenities||[]).join(", ");
+    document.getElementById("hf-cover").value       = h.coverImage || "";
+    document.getElementById("hf-gallery").value     = (h.gallery||[]).join("\n");
+    document.getElementById("hf-maps").value        = h.mapsLink || "";
+    document.getElementById("hf-featured").checked  = !!h.isFeatured;
+    document.getElementById("hf-available").checked = !!h.isAvailable;
+    document.getElementById("hf-ac").checked        = !!h.isAC;
+    document.getElementById("hf-parking").checked   = !!h.hasParking;
+    document.getElementById("hf-dining").checked    = !!h.hasDining;
+    document.getElementById("hf-indoor").checked    = !!h.isIndoor;
+    document.getElementById("hf-veg").checked       = !!h.isVeg;
+    openHallModal(hallId);
+  }
+</script>
+</body>
+</html>

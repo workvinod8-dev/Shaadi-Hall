@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enquiries & Leads — Vendor Panel</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/vendor.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="vendor-body admin-body" style="background:#F5F4F1">
+<div class="vendor-layout">
+
+  <aside class="vendor-sidebar">
+    <div class="sidebar-logo" style="padding:20px 18px;border-bottom:1px solid rgba(200,150,12,0.2);display:flex;align-items:center;gap:10px">
+      <div style="width:36px;height:36px;background:linear-gradient(135deg,#8B1A1A,#C8960C);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:white">🎭</div>
+      <div>
+        <div style="font-family:'Playfair Display',serif;color:white;font-size:1rem;font-weight:700">Vendor Panel</div>
+        <div style="font-size:0.68rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.08em">ShaadiHall</div>
+      </div>
+    </div>
+    <nav style="padding:16px 0;flex:1">
+      <a href="vendor-dashboard.html" class="sidebar-link"><span class="link-icon">📊</span> Dashboard</a>
+      <a href="vendor-profile.html"   class="sidebar-link"><span class="link-icon">👤</span> My Profile</a>
+      <a href="vendor-bookings.html"  class="sidebar-link active"><span class="link-icon">📋</span> Enquiries / Leads</a>
+      <a href="index.html" class="sidebar-link" target="_blank" style="margin-top:8px"><span class="link-icon">🌐</span> View Website</a>
+      <a href="#" class="sidebar-link" onclick="AuthModule.logout()"><span class="link-icon">🚪</span> Logout</a>
+    </nav>
+    <div style="padding:16px 18px;border-top:1px solid rgba(255,255,255,0.08);font-size:0.75rem;color:rgba(255,255,255,0.35)">
+      <span id="vendor-name" style="color:#E8B422">…</span>
+    </div>
+  </aside>
+
+  <main class="vendor-main">
+    <div class="vendor-topbar">
+      <div class="topbar-title" style="font-family:'Playfair Display',serif;font-size:1.1rem">📋 Enquiries & Leads</div>
+      <span style="font-size:0.82rem;color:#7A5A5A" id="leads-count"></span>
+    </div>
+
+    <div class="vendor-content">
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">All Wedding Enquiries</div>
+          <div style="font-size:0.82rem;color:#7A5A5A;max-width:320px">These are enquiries submitted by couples on ShaadiHall. Contact them to offer your services.</div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Customer Name</th>
+                <th>Phone</th>
+                <th>Hall / Venue</th>
+                <th>Event Date</th>
+                <th>Guests</th>
+                <th>Message</th>
+                <th>Received</th>
+              </tr>
+            </thead>
+            <tbody id="vendor-enquiries-body">
+              <tr><td colspan="7" style="text-align:center;padding:30px"><div class="loader" style="margin:auto"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Call-to-action -->
+      <div style="background:linear-gradient(135deg,#1A3A0A,#2D6A18);border-radius:16px;padding:28px;margin-top:20px;color:white">
+        <h3 style="font-family:'Playfair Display',serif;margin-bottom:8px">📞 How to Follow Up</h3>
+        <p style="font-size:0.88rem;color:rgba(255,255,255,0.75);line-height:1.7">
+          Call or WhatsApp the customer's number directly. Introduce yourself, mention you're a vendor on ShaadiHall, and discuss their requirements. 
+          Complete your profile to receive more targeted enquiries from couples planning events in your service areas.
+        </p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+<script src="js/vendor.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const { user } = await AuthModule.requireRole("vendor","vendor-login.html");
+    const userData = await AuthModule.getCurrentUserData();
+    if (userData) document.getElementById("vendor-name").textContent = userData.name;
+
+    const tbody   = document.getElementById("vendor-enquiries-body");
+    const countEl = document.getElementById("leads-count");
+    const snap    = await db.collection("enquiries").orderBy("createdAt","desc").limit(100).get();
+
+    if (countEl) countEl.textContent = `${snap.size} total leads`;
+
+    if (snap.empty) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:40px;color:#7A5A5A">
+        <div style="font-size:2rem;margin-bottom:10px">📭</div>
+        <div style="font-weight:600;margin-bottom:4px">No enquiries yet</div>
+        <div style="font-size:0.85rem">Complete your profile to start receiving leads from couples.</div>
+      </td></tr>`;
+      hideLoading();
+      return;
+    }
+
+    tbody.innerHTML = "";
+    snap.forEach(doc => {
+      const e = doc.data();
+      const tr = document.createElement("tr");
+      const date = e.createdAt ? new Date(e.createdAt.seconds * 1000).toLocaleDateString("en-IN") : "—";
+      tr.innerHTML = `
+        <td><strong>${e.customerName}</strong></td>
+        <td>
+          <a href="tel:${e.phone}" style="color:var(--crimson);font-weight:600">${e.phone}</a>
+          <a href="https://wa.me/91${e.phone}" target="_blank" style="display:inline-flex;align-items:center;gap:3px;margin-left:6px;background:rgba(72,187,120,0.12);color:#276749;padding:2px 8px;border-radius:50px;font-size:0.72rem;font-weight:600">💬 WA</a>
+        </td>
+        <td style="max-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.hallName || "—"}</td>
+        <td>${e.eventDate || "—"}</td>
+        <td>${e.guestCount || "—"}</td>
+        <td style="max-width:180px;font-size:0.82rem;color:#7A5A5A">${(e.message||"No message").slice(0,70)}${e.message?.length>70?"…":""}</td>
+        <td style="font-size:0.8rem;color:#7A5A5A;white-space:nowrap">${date}</td>`;
+      tbody.appendChild(tr);
+    });
+    hideLoading();
+  });
+</script>
+</body>
+</html>

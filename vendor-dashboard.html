@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendor Dashboard — Shaadi Hall</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/vendor.css">
+</head>
+<body class="vendor-body admin-body" style="background:#F5F4F1">
+<div class="vendor-layout">
+
+  <!-- Sidebar -->
+  <aside class="vendor-sidebar" id="vendor-sidebar">
+    <div class="sidebar-logo" style="padding:20px 18px;border-bottom:1px solid rgba(200,150,12,0.2);display:flex;align-items:center;gap:10px">
+      <div style="width:36px;height:36px;background:linear-gradient(135deg,#8B1A1A,#C8960C);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:white">🎭</div>
+      <div>
+        <div style="font-family:'Playfair Display',serif;color:white;font-size:1rem;font-weight:700">Vendor Panel</div>
+        <div style="font-size:0.68rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.08em">ShaadiHall</div>
+      </div>
+    </div>
+    <nav style="padding:16px 0;flex:1">
+      <div class="sidebar-section-label" style="padding:12px 18px 6px;font-size:0.68rem;font-weight:600;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.1em">My Dashboard</div>
+      <a href="vendor-dashboard.html" class="sidebar-link active"><span class="link-icon">📊</span> Dashboard</a>
+      <a href="vendor-profile.html"   class="sidebar-link"><span class="link-icon">👤</span> My Profile</a>
+      <a href="vendor-bookings.html"  class="sidebar-link"><span class="link-icon">📋</span> Enquiries / Leads</a>
+      <div class="sidebar-section-label" style="padding:20px 18px 6px;font-size:0.68rem;font-weight:600;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.1em">More</div>
+      <a href="index.html" class="sidebar-link" target="_blank"><span class="link-icon">🌐</span> View Website</a>
+      <a href="#" class="sidebar-link" onclick="AuthModule.logout()"><span class="link-icon">🚪</span> Logout</a>
+    </nav>
+    <div style="padding:16px 18px;border-top:1px solid rgba(255,255,255,0.08);font-size:0.75rem;color:rgba(255,255,255,0.35)">
+      Logged in as <span id="vendor-name" style="color:#E8B422">…</span>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="vendor-main">
+    <div class="vendor-topbar">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#2D1515">Vendor Dashboard</div>
+        <div style="font-size:0.78rem;color:#7A5A5A" id="vendor-date"></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="status-badge" id="vendor-status" style="font-size:0.8rem">Loading…</span>
+        <a href="vendor-profile.html" class="btn-admin btn-admin-secondary btn-admin-sm">Edit Profile</a>
+      </div>
+    </div>
+
+    <div class="vendor-content">
+
+      <!-- Approval Alert -->
+      <div id="approval-alert" style="display:none;background:linear-gradient(135deg,rgba(237,137,54,0.1),rgba(237,137,54,0.05));border:1px solid rgba(237,137,54,0.3);border-radius:12px;padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;gap:14px">
+        <span style="font-size:1.5rem">⏳</span>
+        <div>
+          <div style="font-weight:600;color:#9c4221;margin-bottom:2px">Account Pending Approval</div>
+          <div style="font-size:0.85rem;color:#7A5A5A">Your profile has been submitted and is awaiting review by our admin team. You'll receive confirmation shortly.</div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid" style="margin-bottom:24px">
+        <div class="stat-card"><div class="stat-icon crimson">👁️</div><div><div class="stat-value" id="vd-views">—</div><div class="stat-label">Profile Views</div></div></div>
+        <div class="stat-card"><div class="stat-icon gold">✉️</div><div><div class="stat-value" id="vd-leads">—</div><div class="stat-label">Enquiries Received</div></div></div>
+        <div class="stat-card"><div class="stat-icon green">⭐</div><div><div class="stat-value" id="vd-rating">—</div><div class="stat-label">Rating</div></div></div>
+        <div class="stat-card"><div class="stat-icon blue">📍</div><div><div class="stat-value" id="vd-city">—</div><div class="stat-label">Service City</div></div></div>
+      </div>
+
+      <!-- Profile Quick View -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+
+        <div class="table-card">
+          <div class="table-header" style="padding:18px 22px">
+            <div class="table-title" style="font-size:1rem">My Profile</div>
+            <a href="vendor-profile.html" class="btn-admin btn-admin-secondary btn-admin-sm">Edit →</a>
+          </div>
+          <div style="padding:20px 22px">
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+              <img id="vd-photo" src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=100" alt="Profile" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid #C8960C">
+              <div>
+                <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#2D1515" id="vd-profile-name">Loading…</div>
+                <div style="font-size:0.82rem;color:#7A5A5A;text-transform:uppercase;letter-spacing:0.05em;font-weight:600" id="vd-category">—</div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding-bottom:8px;border-bottom:1px solid #E8DDD0">
+                <span style="color:#7A5A5A">City</span>
+                <span id="vd-city-label" style="font-weight:600">—</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding-bottom:8px;border-bottom:1px solid #E8DDD0">
+                <span style="color:#7A5A5A">Status</span>
+                <span id="vd-approved-label" style="font-weight:600">—</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:0.85rem">
+                <span style="color:#7A5A5A">Service Areas</span>
+                <span id="vd-areas" style="font-weight:600;text-align:right;max-width:180px">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Enquiries -->
+        <div class="table-card">
+          <div class="table-header" style="padding:18px 22px">
+            <div class="table-title" style="font-size:1rem">Recent Enquiries</div>
+            <a href="vendor-bookings.html" class="btn-admin btn-admin-secondary btn-admin-sm">View All →</a>
+          </div>
+          <div style="overflow:hidden">
+            <table class="data-table" style="font-size:0.82rem">
+              <thead><tr><th>Name</th><th>Hall</th><th>Date</th></tr></thead>
+              <tbody id="vendor-recent-enquiries">
+                <tr><td colspan="3" style="text-align:center;padding:20px;color:#7A5A5A">No enquiries yet</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Help Card -->
+      <div style="background:linear-gradient(135deg,var(--crimson-dk),var(--dark-mid));border-radius:16px;padding:28px;margin-top:20px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.2rem;color:white;margin-bottom:6px">Complete Your Profile</div>
+          <div style="font-size:0.85rem;color:rgba(255,255,255,0.7)">Add packages, photos and service areas to get more enquiries from couples.</div>
+        </div>
+        <a href="vendor-profile.html" class="btn btn-gold">Update Profile →</a>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+<script src="js/vendor.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const { user } = await AuthModule.requireRole("vendor", "vendor-login.html");
+    const userData = await AuthModule.getCurrentUserData();
+    if (userData) document.getElementById("vendor-name").textContent = userData.name;
+
+    document.getElementById("vendor-date").textContent = new Date().toLocaleDateString("en-IN", { weekday:"long", year:"numeric", month:"long", day:"numeric" });
+
+    // Load vendor document
+    const snap = await db.collection("vendors").where("uid","==",user.uid).limit(1).get();
+    if (!snap.empty) {
+      const v = snap.docs[0].data();
+      const isApproved = v.isApproved;
+
+      // Approval alert
+      if (!isApproved) document.getElementById("approval-alert").style.display = "flex";
+
+      // Status badge
+      const statusEl = document.getElementById("vendor-status");
+      statusEl.textContent  = isApproved ? "✅ Approved" : "⏳ Pending";
+      statusEl.className    = `status-badge ${isApproved ? "status-active" : "status-pending"}`;
+
+      // Profile fields
+      document.getElementById("vd-profile-name").textContent = v.name;
+      document.getElementById("vd-category").textContent     = v.category?.toUpperCase() || "";
+      document.getElementById("vd-city").textContent         = v.city || "—";
+      document.getElementById("vd-city-label").textContent   = v.city || "—";
+      document.getElementById("vd-rating").textContent       = v.rating ? v.rating.toFixed(1) + "★" : "New";
+      document.getElementById("vd-approved-label").textContent = isApproved ? "Approved ✅" : "Pending ⏳";
+      document.getElementById("vd-areas").textContent        = (v.serviceAreas || []).join(", ") || "Not set";
+      if (v.profileImage) document.getElementById("vd-photo").src = v.profileImage;
+
+      // Recent enquiries (last 3)
+      const enqSnap = await db.collection("enquiries").orderBy("createdAt","desc").limit(3).get();
+      const tbody   = document.getElementById("vendor-recent-enquiries");
+      if (!enqSnap.empty) {
+        tbody.innerHTML = "";
+        enqSnap.forEach(d => {
+          const e = d.data();
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${e.customerName}</td><td style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.hallName||"—"}</td><td>${e.eventDate||"—"}</td>`;
+          tbody.appendChild(tr);
+        });
+      }
+      document.getElementById("vd-leads").textContent = enqSnap.size;
+      document.getElementById("vd-views").textContent = Math.floor(Math.random() * 120) + 30; // placeholder
+    }
+    hideLoading();
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendor Portal — Shaadi Hall</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: linear-gradient(135deg, #0D2010 0%, #1A3A0A 60%, #2A1A00 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .login-card { background: #fff; border-radius: 24px; padding: 0; width: 100%; max-width: 460px; box-shadow: 0 40px 80px rgba(0,0,0,0.4); overflow: hidden; }
+    .card-header { background: linear-gradient(135deg, #1A3A0A, #2D6A18); padding: 32px 40px; text-align: center; }
+    .card-header .icon { font-size: 2.5rem; margin-bottom: 10px; }
+    .card-header h1 { font-family: var(--font-display); color: white; font-size: 1.6rem; margin-bottom: 4px; }
+    .card-header p { color: rgba(255,255,255,0.7); font-size: 0.85rem; }
+    .card-body { padding: 32px 40px; }
+    .tab-row { display: flex; gap: 0; margin-bottom: 24px; background: var(--cream); border-radius: 10px; padding: 4px; }
+    .tab-btn { flex: 1; padding: 10px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: var(--transition); background: none; border: none; color: var(--text-muted); font-family: var(--font-body); }
+    .tab-btn.active { background: white; color: var(--crimson); box-shadow: var(--shadow-sm); }
+    .form-label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .form-input { width: 100%; padding: 11px 14px; border: 2px solid var(--cream-dk); border-radius: 10px; font-size: 0.92rem; background: var(--cream); transition: var(--transition); margin-bottom: 14px; font-family: var(--font-body); }
+    .form-input:focus { outline: none; border-color: #2D6A18; background: white; box-shadow: 0 0 0 4px rgba(45,106,24,0.1); }
+    .login-btn { width: 100%; padding: 13px; background: linear-gradient(135deg, #2D6A18, #4A9A28); color: white; border: none; border-radius: 10px; font-size: 0.98rem; font-weight: 600; cursor: pointer; transition: var(--transition); font-family: var(--font-body); }
+    .login-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(45,106,24,0.35); }
+    .login-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+    .back-link { display: block; text-align: center; margin-top: 18px; font-size: 0.84rem; color: var(--text-muted); }
+    .back-link a { color: #2D6A18; font-weight: 600; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .info-box { background: rgba(45,106,24,0.07); border: 1px solid rgba(45,106,24,0.2); border-radius: 10px; padding: 12px 14px; margin-bottom: 18px; font-size: 0.82rem; color: #2D6A18; display: flex; align-items: flex-start; gap: 8px; }
+  </style>
+</head>
+<body>
+
+<div class="login-card">
+  <div class="card-header">
+    <div class="icon">🎭</div>
+    <h1>Vendor Portal</h1>
+    <p>Manage your wedding services on ShaadiHall</p>
+  </div>
+
+  <div class="card-body">
+    <!-- Tabs -->
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="switchTab('login', this)">Sign In</button>
+      <button class="tab-btn" onclick="switchTab('register', this)">Register</button>
+    </div>
+
+    <!-- Login Form -->
+    <div id="tab-login">
+      <form onsubmit="vendorLogin(event)">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" id="vendor-email" placeholder="your@email.com" required autocomplete="email">
+
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="vendor-password" placeholder="••••••••" required>
+
+        <button type="submit" class="login-btn">Sign In →</button>
+      </form>
+    </div>
+
+    <!-- Register Form -->
+    <div id="tab-register" style="display:none">
+      <div class="info-box">
+        ℹ️ After registration, your account will be reviewed and approved by our admin team before going live.
+      </div>
+      <form onsubmit="vendorRegister(event)">
+        <div class="form-row-2">
+          <div>
+            <label class="form-label">Full Name *</label>
+            <input type="text" class="form-input" id="vr-name" placeholder="Business / Your Name" required>
+          </div>
+          <div>
+            <label class="form-label">Phone *</label>
+            <input type="tel" class="form-input" id="vr-phone" placeholder="9XXXXXXXXX" required>
+          </div>
+        </div>
+        <label class="form-label">Email *</label>
+        <input type="email" class="form-input" id="vr-email" placeholder="business@email.com" required>
+
+        <label class="form-label">Service Category *</label>
+        <select class="form-input" id="vr-category" required>
+          <option value="">Select your service…</option>
+          <option value="catering">🍽️ Catering</option>
+          <option value="decoration">💐 Decoration</option>
+          <option value="photography">📸 Photography / Videography</option>
+          <option value="makeup">💄 Bridal Makeup</option>
+          <option value="mehendi">🌿 Mehendi</option>
+          <option value="dj">🎧 DJ & Sound</option>
+          <option value="flower">🌸 Flower Decoration</option>
+          <option value="events">🎪 Event Planner</option>
+        </select>
+
+        <label class="form-label">Password * (min. 6 characters)</label>
+        <input type="password" class="form-input" id="vr-password" placeholder="••••••••" minlength="6" required>
+
+        <button type="submit" class="login-btn">Create Vendor Account →</button>
+      </form>
+    </div>
+
+    <div class="back-link">
+      <a href="index.html">← Back to Website</a>
+      &nbsp;·&nbsp;
+      <a href="customer-login.html">Customer Login</a>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+<script src="js/vendor.js"></script>
+<script>
+  function switchTab(tab, btn) {
+    document.getElementById("tab-login").style.display    = tab === "login"    ? "" : "none";
+    document.getElementById("tab-register").style.display = tab === "register" ? "" : "none";
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    auth.onAuthStateChanged(async user => {
+      if (!user) return;
+      const role = await AuthModule.getUserRole(user.uid);
+      if (role === "vendor") window.location.href = "vendor-dashboard.html";
+    });
+  });
+</script>
+</body>
+</html>

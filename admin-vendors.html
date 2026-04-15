@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Vendors — Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+<div class="admin-layout">
+
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🏛️</div>
+      <div><div class="sidebar-logo-text">ShaadiHall</div><div class="sidebar-logo-sub">Admin Panel</div></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Main</div>
+      <a href="admin-dashboard.html" class="sidebar-link"><span class="link-icon">📊</span> Dashboard</a>
+      <a href="admin-halls.html"     class="sidebar-link"><span class="link-icon">🏛️</span> Marriage Halls</a>
+      <a href="admin-vendors.html"   class="sidebar-link active"><span class="link-icon">🎭</span> Vendors</a>
+      <a href="admin-bookings.html"  class="sidebar-link"><span class="link-icon">📅</span> Bookings</a>
+      <a href="admin-users.html"     class="sidebar-link"><span class="link-icon">👥</span> Users</a>
+      <div class="sidebar-section-label" style="margin-top:12px">Settings</div>
+      <a href="index.html" class="sidebar-link" target="_blank"><span class="link-icon">🌐</span> View Website</a>
+      <a href="#" class="sidebar-link" onclick="AuthModule.logout()"><span class="link-icon">🚪</span> Logout</a>
+    </nav>
+    <div class="sidebar-footer" style="font-size:0.75rem;color:rgba(255,255,255,0.3)">Admin: <span id="admin-name" style="color:var(--admin-gold)">…</span></div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div class="topbar-title">🎭 Manage Vendors</div>
+      <div class="topbar-right">
+        <button class="btn-admin btn-admin-primary" onclick="openVendorModal()">➕ Add Vendor</button>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- Filter tabs -->
+      <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+        <button class="btn-admin btn-admin-secondary btn-admin-sm active-tab" onclick="filterVendors('all',this)">All Vendors</button>
+        <button class="btn-admin btn-admin-secondary btn-admin-sm" onclick="filterVendors('pending',this)">⏳ Pending Approval</button>
+        <button class="btn-admin btn-admin-secondary btn-admin-sm" onclick="filterVendors('approved',this)">✅ Approved</button>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">Vendor Directory</div>
+          <div class="table-actions">
+            <div class="search-wrap">
+              <input type="text" class="search-input" placeholder="Search vendors…" oninput="filterVendorTable(this.value)">
+            </div>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Photo</th>
+                <th>Vendor Name</th>
+                <th>Category</th>
+                <th>City</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="vendors-table-body">
+              <tr><td colspan="7" style="text-align:center;padding:30px"><div class="loader" style="margin:auto"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Add Vendor Modal -->
+<div class="modal-overlay" id="vendor-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="vendor-modal-title">Add New Vendor</div>
+      <button class="modal-close" onclick="closeVendorModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="vendor-form" class="admin-form" onsubmit="saveVendor(event)">
+        <input type="hidden" id="vendor-form-id">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Vendor Name *</label>
+            <input type="text" class="form-control" id="vf-name" required>
+          </div>
+          <div class="form-group">
+            <label>Category *</label>
+            <select class="form-control" id="vf-category" required>
+              <option value="catering">Catering</option>
+              <option value="decoration">Decoration</option>
+              <option value="photography">Photography</option>
+              <option value="makeup">Makeup</option>
+              <option value="mehendi">Mehendi</option>
+              <option value="dj">DJ & Sound</option>
+              <option value="flower">Flower Decoration</option>
+              <option value="events">Event Planner</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone *</label>
+            <input type="tel" class="form-control" id="vf-phone" required>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" class="form-control" id="vf-email">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>City</label>
+            <select class="form-control" id="vf-city">
+              <option value="Vijayapura">Vijayapura</option>
+              <option value="Bagalkot">Bagalkot</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Profile Image URL</label>
+            <input type="url" class="form-control" id="vf-image" placeholder="https://…">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea class="form-control" id="vf-description" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Service Areas (comma-separated)</label>
+          <input type="text" class="form-control" id="vf-areas" placeholder="Vijayapura, Bagalkot">
+        </div>
+        <div style="display:flex;gap:16px">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.88rem">
+            <input type="checkbox" id="vf-approved" checked> ✅ Approved
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.88rem">
+            <input type="checkbox" id="vf-active" checked> 🟢 Active
+          </label>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-admin btn-admin-secondary" onclick="closeVendorModal()">Cancel</button>
+      <button class="btn-admin btn-admin-primary" onclick="document.getElementById('vendor-form').dispatchEvent(new Event('submit',{cancelable:true,bubbles:true}))">Save Vendor</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+<script src="js/admin.js"></script>
+<script>
+  let allVendorRows = [];
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    await initAdmin();
+    loadAdminVendors();
+    hideLoading();
+  });
+
+  function filterVendors(type, btn) {
+    document.querySelectorAll(".active-tab").forEach(b => b.classList.remove("active-tab"));
+    btn.classList.add("active-tab");
+    const rows = document.querySelectorAll("#vendors-table-body tr");
+    rows.forEach(row => {
+      if (type === "all") { row.style.display = ""; return; }
+      const status = row.querySelector(".status-badge")?.textContent.toLowerCase() || "";
+      row.style.display = status.includes(type) ? "" : "none";
+    });
+  }
+
+  function filterVendorTable(q) {
+    document.querySelectorAll("#vendors-table-body tr").forEach(row => {
+      row.style.display = row.textContent.toLowerCase().includes(q.toLowerCase()) ? "" : "none";
+    });
+  }
+
+  function openVendorModal(id = null) {
+    document.getElementById("vendor-modal-title").textContent = id ? "Edit Vendor" : "Add New Vendor";
+    document.getElementById("vendor-form-id").value = id || "";
+    if (!id) document.getElementById("vendor-form").reset();
+    document.getElementById("vendor-modal").classList.add("open");
+  }
+  function closeVendorModal() { document.getElementById("vendor-modal").classList.remove("open"); }
+
+  async function saveVendor(event) {
+    event.preventDefault();
+    const id = document.getElementById("vendor-form-id").value;
+    const data = {
+      name:         document.getElementById("vf-name").value.trim(),
+      category:     document.getElementById("vf-category").value,
+      phone:        document.getElementById("vf-phone").value.trim(),
+      email:        document.getElementById("vf-email").value.trim(),
+      city:         document.getElementById("vf-city").value,
+      profileImage: document.getElementById("vf-image").value.trim(),
+      description:  document.getElementById("vf-description").value.trim(),
+      serviceAreas: document.getElementById("vf-areas").value.split(",").map(s=>s.trim()).filter(Boolean),
+      isApproved:   document.getElementById("vf-approved").checked,
+      isActive:     document.getElementById("vf-active").checked,
+    };
+    try {
+      if (id) {
+        await db.collection("vendors").doc(id).update({ ...data, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+        showToast("Vendor updated ✅");
+      } else {
+        await db.collection("vendors").add({ ...data, uid: null, packages: [], gallery: [], rating: 0, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+        showToast("Vendor added ✅");
+      }
+      closeVendorModal();
+      loadAdminVendors();
+    } catch(err) { showToast("Error: " + err.message, "error"); }
+  }
+</script>
+</body>
+</html>

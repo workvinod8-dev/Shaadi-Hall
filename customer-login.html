@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login / Register — Shaadi Hall</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: linear-gradient(135deg, var(--crimson-dk) 0%, #2D0D0D 50%, #1A0D00 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .login-card { background: #fff; border-radius: 24px; width: 100%; max-width: 440px; box-shadow: 0 40px 80px rgba(0,0,0,0.4); overflow: hidden; }
+    .card-top { background: linear-gradient(135deg, var(--crimson-dk), var(--dark-mid)); padding: 36px 40px; text-align: center; position: relative; overflow: hidden; }
+    .card-top::before { content: '🌸'; position: absolute; right: -20px; top: -20px; font-size: 120px; opacity: 0.07; }
+    .card-top .logo { font-family: var(--font-display); font-size: 2rem; color: white; margin-bottom: 4px; }
+    .card-top .logo em { color: var(--gold-lt); }
+    .card-top p { color: rgba(255,255,255,0.65); font-size: 0.88rem; }
+    .card-body { padding: 32px 40px; }
+    .tab-row { display: flex; background: var(--cream); border-radius: 12px; padding: 4px; margin-bottom: 24px; }
+    .tab-btn { flex: 1; padding: 10px; border-radius: 9px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; background: none; font-family: var(--font-body); color: var(--text-muted); transition: var(--transition); }
+    .tab-btn.active { background: white; color: var(--crimson); box-shadow: var(--shadow-sm); }
+    .flabel { display: block; font-size: 0.78rem; font-weight: 600; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .finput { width: 100%; padding: 11px 14px; border: 2px solid var(--cream-dk); border-radius: 10px; font-size: 0.92rem; background: var(--cream); transition: var(--transition); margin-bottom: 14px; font-family: var(--font-body); }
+    .finput:focus { outline: none; border-color: var(--crimson); background: white; box-shadow: 0 0 0 4px rgba(139,26,26,0.08); }
+    .fbtn { width: 100%; padding: 13px; background: linear-gradient(135deg, var(--crimson), var(--crimson-lt)); color: white; border: none; border-radius: 10px; font-size: 0.98rem; font-weight: 600; cursor: pointer; transition: var(--transition); font-family: var(--font-body); }
+    .fbtn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(139,26,26,0.3); }
+    .fbtn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+    .or-line { display: flex; align-items: center; gap: 12px; margin: 16px 0; color: var(--text-muted); font-size: 0.82rem; }
+    .or-line::before, .or-line::after { content: ''; flex: 1; height: 1px; background: var(--cream-dk); }
+    .links-row { display: flex; justify-content: space-between; margin-top: 16px; font-size: 0.82rem; color: var(--text-muted); flex-wrap: wrap; gap: 6px; }
+    .links-row a { color: var(--crimson); font-weight: 600; }
+    .g-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  </style>
+</head>
+<body>
+
+<div class="login-card">
+  <div class="card-top">
+    <div class="logo">Shaadi<em>Venue</em></div>
+    <p>Your trusted wedding venue discovery platform</p>
+  </div>
+
+  <div class="card-body">
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="switchTab('login', this)">Sign In</button>
+      <button class="tab-btn" onclick="switchTab('register', this)">Create Account</button>
+    </div>
+
+    <!-- Login -->
+    <div id="tab-login">
+      <form onsubmit="customerLogin(event)">
+        <label class="flabel">Email Address</label>
+        <input type="email" class="finput" id="cust-email" placeholder="you@email.com" required autocomplete="email">
+
+        <label class="flabel">Password</label>
+        <input type="password" class="finput" id="cust-password" placeholder="••••••••" required autocomplete="current-password">
+
+        <button type="submit" class="fbtn">Sign In →</button>
+      </form>
+
+      <div class="or-line">or</div>
+
+      <div style="text-align:center;font-size:0.85rem;color:var(--text-muted)">
+        Don't have an account? <a href="#" onclick="switchTab('register', document.querySelectorAll('.tab-btn')[1])" style="color:var(--crimson);font-weight:600">Create one free →</a>
+      </div>
+    </div>
+
+    <!-- Register -->
+    <div id="tab-register" style="display:none">
+      <form onsubmit="customerRegister(event)">
+        <div class="g-row">
+          <div>
+            <label class="flabel">Full Name *</label>
+            <input type="text" class="finput" id="cr-name" placeholder="Your Name" required>
+          </div>
+          <div>
+            <label class="flabel">Phone *</label>
+            <input type="tel" class="finput" id="cr-phone" placeholder="9XXXXXXXXX" required>
+          </div>
+        </div>
+        <label class="flabel">Email Address *</label>
+        <input type="email" class="finput" id="cr-email" placeholder="you@email.com" required autocomplete="email">
+
+        <label class="flabel">Password * (min. 6 characters)</label>
+        <input type="password" class="finput" id="cr-password" placeholder="••••••••" minlength="6" required autocomplete="new-password">
+
+        <button type="submit" class="fbtn">Create Free Account →</button>
+        <p style="font-size:0.75rem;color:var(--text-muted);text-align:center;margin-top:10px">
+          By registering you agree to our Terms of Service and Privacy Policy
+        </p>
+      </form>
+    </div>
+
+    <div class="links-row">
+      <a href="index.html">← Back to Home</a>
+      <a href="vendor-login.html">Vendor Portal</a>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+<script src="js/vendor.js"></script>
+<script>
+  function switchTab(tab, btn) {
+    document.getElementById("tab-login").style.display    = tab === "login"    ? "" : "none";
+    document.getElementById("tab-register").style.display = tab === "register" ? "" : "none";
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    auth.onAuthStateChanged(async user => {
+      if (!user) return;
+      const role = await AuthModule.getUserRole(user.uid);
+      if (role === "customer") window.location.href = "customer-dashboard.html";
+      else if (role === "vendor") window.location.href = "vendor-dashboard.html";
+      else if (role === "admin")  window.location.href = "admin-dashboard.html";
+    });
+  });
+</script>
+</body>
+</html>

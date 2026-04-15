@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — Shaadi Hall</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+
+<div class="admin-layout">
+
+  <!-- ── Sidebar ── -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🏛️</div>
+      <div>
+        <div class="sidebar-logo-text">ShaadiHall</div>
+        <div class="sidebar-logo-sub">Admin Panel</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Main</div>
+      <a href="admin-dashboard.html" class="sidebar-link active"><span class="link-icon">📊</span> Dashboard</a>
+      <a href="admin-halls.html"     class="sidebar-link"><span class="link-icon">🏛️</span> Marriage Halls</a>
+      <a href="admin-vendors.html"   class="sidebar-link"><span class="link-icon">🎭</span> Vendors</a>
+      <a href="admin-bookings.html"  class="sidebar-link"><span class="link-icon">📅</span> Bookings <span class="badge" id="sb-pending">…</span></a>
+      <a href="admin-users.html"     class="sidebar-link"><span class="link-icon">👥</span> Users</a>
+
+      <div class="sidebar-section-label" style="margin-top:12px">Settings</div>
+      <a href="index.html" class="sidebar-link" target="_blank"><span class="link-icon">🌐</span> View Website</a>
+      <a href="#" class="sidebar-link" onclick="AuthModule.logout()"><span class="link-icon">🚪</span> Logout</a>
+    </nav>
+
+    <div class="sidebar-footer" style="font-size:0.75rem;color:rgba(255,255,255,0.3)">
+      Logged in as <span id="admin-name" style="color:var(--admin-gold)">Admin</span>
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <div class="topbar-title">Dashboard Overview</div>
+        <div style="font-size:0.78rem;color:var(--admin-muted)" id="today-date"></div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-icon" title="Notifications"><span>🔔</span><span class="notif-dot"></span></div>
+        <a href="index.html" target="_blank" class="btn-admin btn-admin-secondary btn-admin-sm">🌐 View Site</a>
+        <div class="admin-avatar" id="admin-avatar">A</div>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- Welcome -->
+      <div style="margin-bottom:24px">
+        <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--admin-text)">Welcome back, <span id="admin-welcome-name" style="color:var(--admin-crimson)">Admin</span> 👋</h2>
+        <p style="color:var(--admin-muted);font-size:0.88rem">Here's what's happening on ShaadiHall today.</p>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon crimson">🏛️</div>
+          <div>
+            <div class="stat-value" id="stat-halls">—</div>
+            <div class="stat-label">Marriage Halls</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon gold">🎭</div>
+          <div>
+            <div class="stat-value" id="stat-vendors">—</div>
+            <div class="stat-label">Vendors</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">📅</div>
+          <div>
+            <div class="stat-value" id="stat-bookings">—</div>
+            <div class="stat-label">Total Bookings</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue">👥</div>
+          <div>
+            <div class="stat-value" id="stat-customers">—</div>
+            <div class="stat-label">Customers</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon crimson">✉️</div>
+          <div>
+            <div class="stat-value" id="stat-enquiries">—</div>
+            <div class="stat-label">Enquiries</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon gold">⏳</div>
+          <div>
+            <div class="stat-value" id="stat-pending">—</div>
+            <div class="stat-label">Pending Bookings</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div style="margin-bottom:8px;font-size:0.82rem;font-weight:600;color:var(--admin-muted);text-transform:uppercase;letter-spacing:0.06em">Quick Actions</div>
+      <div class="quick-actions">
+        <a href="admin-halls.html"    class="quick-action"><div class="quick-action-icon">➕</div><div class="quick-action-label">Add Hall</div></a>
+        <a href="admin-vendors.html"  class="quick-action"><div class="quick-action-icon">✅</div><div class="quick-action-label">Approve Vendors</div></a>
+        <a href="admin-bookings.html" class="quick-action"><div class="quick-action-icon">📋</div><div class="quick-action-label">View Bookings</div></a>
+        <a href="admin-users.html"    class="quick-action"><div class="quick-action-icon">👥</div><div class="quick-action-label">Manage Users</div></a>
+        <a href="index.html" target="_blank" class="quick-action"><div class="quick-action-icon">🌐</div><div class="quick-action-label">Visit Site</div></a>
+      </div>
+
+      <!-- Recent Bookings Table -->
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">⏳ Recent Pending Bookings</div>
+          <a href="admin-bookings.html" class="btn-admin btn-admin-secondary btn-admin-sm">View All →</a>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Hall</th>
+                <th>Event Date</th>
+                <th>Guests</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="recent-bookings-body">
+              <tr><td colspan="5" style="text-align:center;padding:30px;color:var(--admin-muted)">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /admin-content -->
+  </main>
+</div><!-- /admin-layout -->
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+<script src="js/admin.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    await initAdmin();
+    const data = await AuthModule.getCurrentUserData();
+    if (data) {
+      document.getElementById("admin-welcome-name").textContent = data.name;
+      document.getElementById("admin-avatar").textContent = data.name[0].toUpperCase();
+    }
+    document.getElementById("today-date").textContent = new Date().toLocaleDateString("en-IN", { weekday:"long", year:"numeric", month:"long", day:"numeric" });
+    loadDashboardStats();
+
+    // Update sidebar pending badge
+    const pendingSnap = await db.collection("bookings").where("status","==","pending").get();
+    const sbEl = document.getElementById("sb-pending");
+    if (sbEl) sbEl.textContent = pendingSnap.size;
+    hideLoading();
+  });
+</script>
+</body>
+</html>

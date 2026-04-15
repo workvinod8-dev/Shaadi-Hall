@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Users — Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+<div class="admin-layout">
+
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🏛️</div>
+      <div><div class="sidebar-logo-text">ShaadiHall</div><div class="sidebar-logo-sub">Admin Panel</div></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Main</div>
+      <a href="admin-dashboard.html" class="sidebar-link"><span class="link-icon">📊</span> Dashboard</a>
+      <a href="admin-halls.html"     class="sidebar-link"><span class="link-icon">🏛️</span> Marriage Halls</a>
+      <a href="admin-vendors.html"   class="sidebar-link"><span class="link-icon">🎭</span> Vendors</a>
+      <a href="admin-bookings.html"  class="sidebar-link"><span class="link-icon">📅</span> Bookings</a>
+      <a href="admin-users.html"     class="sidebar-link active"><span class="link-icon">👥</span> Users</a>
+      <div class="sidebar-section-label" style="margin-top:12px">Settings</div>
+      <a href="index.html" class="sidebar-link" target="_blank"><span class="link-icon">🌐</span> View Website</a>
+      <a href="#" class="sidebar-link" onclick="AuthModule.logout()"><span class="link-icon">🚪</span> Logout</a>
+    </nav>
+    <div class="sidebar-footer" style="font-size:0.75rem;color:rgba(255,255,255,0.3)">Admin: <span id="admin-name" style="color:var(--admin-gold)">…</span></div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div class="topbar-title">👥 All Users</div>
+      <div class="topbar-right">
+        <button class="btn-admin btn-admin-gold btn-admin-sm" onclick="showCreateAdminTip()">➕ Create Admin</button>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- Stats row -->
+      <div class="stats-grid" style="margin-bottom:24px">
+        <div class="stat-card"><div class="stat-icon crimson">👑</div><div><div class="stat-value" id="count-admin">—</div><div class="stat-label">Admins</div></div></div>
+        <div class="stat-card"><div class="stat-icon gold">🎭</div><div><div class="stat-value" id="count-vendor">—</div><div class="stat-label">Vendors</div></div></div>
+        <div class="stat-card"><div class="stat-icon green">👤</div><div><div class="stat-value" id="count-customer">—</div><div class="stat-label">Customers</div></div></div>
+        <div class="stat-card"><div class="stat-icon blue">📊</div><div><div class="stat-value" id="count-total">—</div><div class="stat-label">Total Users</div></div></div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">User Directory</div>
+          <div class="table-actions">
+            <div class="search-wrap">
+              <input type="text" class="search-input" placeholder="Search users…" oninput="filterUsers(this.value)">
+            </div>
+            <select class="filter-select" onchange="filterByRole(this.value)" style="font-size:0.82rem;padding:8px 12px;border:1.5px solid var(--admin-border);border-radius:8px;background:var(--admin-bg)">
+              <option value="">All Roles</option>
+              <option value="admin">Admin</option>
+              <option value="vendor">Vendor</option>
+              <option value="customer">Customer</option>
+            </select>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Role</th>
+                <th>Joined</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="users-table-body">
+              <tr><td colspan="6" style="text-align:center;padding:30px"><div class="loader" style="margin:auto"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Create Admin Helper -->
+      <div id="create-admin-tip" style="display:none;margin-top:24px" class="table-card">
+        <div class="modal-header" style="border:none;padding:20px 24px 0">
+          <div class="modal-title">Create Admin User</div>
+          <button class="modal-close" onclick="document.getElementById('create-admin-tip').style.display='none'">✕</button>
+        </div>
+        <div style="padding:20px 24px 24px">
+          <p style="color:var(--admin-muted);font-size:0.88rem;margin-bottom:16px">
+            To create an admin account, open your browser console (F12) and run:
+          </p>
+          <pre style="background:var(--admin-sidebar);color:var(--admin-gold);padding:16px;border-radius:10px;font-size:0.82rem;overflow-x:auto;line-height:1.6">createAdminUser("admin@yourdomain.com", "securepassword123", "Admin Name")</pre>
+          <p style="color:var(--admin-muted);font-size:0.8rem;margin-top:10px">Make sure you're on a page that has seed-data.js loaded (e.g. index.html)</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+<script src="js/admin.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    await initAdmin();
+    loadUsersTable();
+    hideLoading();
+  });
+
+  function showCreateAdminTip() {
+    const el = document.getElementById("create-admin-tip");
+    el.style.display = el.style.display === "none" ? "" : "none";
+  }
+
+  function filterUsers(q) {
+    document.querySelectorAll("#users-table-body tr").forEach(row => {
+      row.style.display = row.textContent.toLowerCase().includes(q.toLowerCase()) ? "" : "none";
+    });
+  }
+
+  function filterByRole(role) {
+    document.querySelectorAll("#users-table-body tr").forEach(row => {
+      if (!role) { row.style.display = ""; return; }
+      row.style.display = row.textContent.toLowerCase().includes(role) ? "" : "none";
+    });
+  }
+
+  async function loadUsersTable() {
+    const tbody = document.getElementById("users-table-body");
+    const snap = await db.collection("users").orderBy("createdAt","desc").get();
+    let counts = { admin: 0, vendor: 0, customer: 0 };
+    tbody.innerHTML = "";
+    snap.forEach(doc => {
+      const u = doc.data();
+      counts[u.role] = (counts[u.role] || 0) + 1;
+      const roleColor = u.role === "admin" ? "status-approved" : u.role === "vendor" ? "status-pending" : "status-active";
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--admin-crimson),var(--admin-gold));display:flex;align-items:center;justify-content:center;color:white;font-size:0.78rem;font-weight:700;flex-shrink:0">${u.name?.[0]?.toUpperCase()||"?"}</div>
+            <strong>${u.name || "—"}</strong>
+          </div>
+        </td>
+        <td style="font-size:0.88rem">${u.email}</td>
+        <td>${u.phone || "—"}</td>
+        <td><span class="status-badge ${roleColor}">${u.role}</span></td>
+        <td style="font-size:0.8rem;color:var(--admin-muted)">${u.createdAt ? new Date(u.createdAt.seconds*1000).toLocaleDateString("en-IN") : "—"}</td>
+        <td><span class="status-badge ${u.isActive ? "status-active" : "status-inactive"}">${u.isActive ? "Active" : "Inactive"}</span></td>`;
+      tbody.appendChild(tr);
+    });
+    document.getElementById("count-admin").textContent    = counts.admin    || 0;
+    document.getElementById("count-vendor").textContent   = counts.vendor   || 0;
+    document.getElementById("count-customer").textContent = counts.customer || 0;
+    document.getElementById("count-total").textContent    = snap.size;
+    if (snap.empty) tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--admin-muted)">No users found</td></tr>`;
+  }
+</script>
+</body>
+</html>

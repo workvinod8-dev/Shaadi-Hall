@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account — Shaadi Hall</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/customer.css">
+</head>
+<body class="customer-body customer-layout">
+
+<!-- Header -->
+<header class="customer-header">
+  <a href="index.html" style="font-family:var(--font-display);font-size:1.3rem;color:var(--crimson);display:flex;align-items:center;gap:8px">
+    <span style="width:30px;height:30px;background:linear-gradient(135deg,var(--crimson),var(--gold));border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:0.9rem">🏛️</span>
+    ShaadiHall
+  </a>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a href="halls.html" class="btn btn-outline btn-sm">Browse Halls</a>
+    <button onclick="AuthModule.logout()" class="btn btn-primary btn-sm">Logout</button>
+  </div>
+</header>
+
+<div class="customer-content">
+
+  <!-- Profile Banner -->
+  <div style="background:linear-gradient(135deg,var(--crimson-dk),var(--dark-mid));border-radius:20px;padding:32px;margin-bottom:28px;color:white;display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+    <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-lt));display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700;color:white;flex-shrink:0" id="cust-avatar">?</div>
+    <div style="flex:1">
+      <div style="font-family:var(--font-display);font-size:1.5rem;color:white;margin-bottom:4px">Welcome, <span id="cust-name">…</span> 👋</div>
+      <div style="font-size:0.85rem;color:rgba(255,255,255,0.65)" id="cust-email"></div>
+      <div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:2px" id="cust-phone"></div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a href="halls.html" class="btn btn-gold btn-sm">🏛️ Browse Halls</a>
+      <a href="vendors.html" class="btn btn-outline-white btn-sm">🎭 Find Vendors</a>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:28px">
+    <div style="background:white;border-radius:14px;padding:20px;border:1px solid var(--cream-dk);display:flex;align-items:center;gap:14px">
+      <span style="font-size:1.8rem">📅</span>
+      <div><div style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;color:var(--crimson)" id="stat-book-count">—</div><div style="font-size:0.8rem;color:var(--text-muted)">My Bookings</div></div>
+    </div>
+    <div style="background:white;border-radius:14px;padding:20px;border:1px solid var(--cream-dk);display:flex;align-items:center;gap:14px">
+      <span style="font-size:1.8rem">❤️</span>
+      <div><div style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;color:var(--crimson)" id="stat-fav-count">—</div><div style="font-size:0.8rem;color:var(--text-muted)">Saved Halls</div></div>
+    </div>
+    <div style="background:white;border-radius:14px;padding:20px;border:1px solid var(--cream-dk);display:flex;align-items:center;gap:14px">
+      <span style="font-size:1.8rem">🏛️</span>
+      <div><div style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;color:var(--crimson)">12+</div><div style="font-size:0.8rem;color:var(--text-muted)">Halls Available</div></div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="customer-tabs">
+    <div class="customer-tab active" onclick="switchCustomerTab('bookings', this)">📅 My Bookings</div>
+    <div class="customer-tab" onclick="switchCustomerTab('favorites', this)">❤️ Saved Halls</div>
+  </div>
+
+  <!-- Bookings Panel -->
+  <div id="panel-bookings">
+    <div id="customer-bookings">
+      <div style="text-align:center;padding:30px"><div class="loader" style="margin:auto"></div></div>
+    </div>
+  </div>
+
+  <!-- Favourites Panel -->
+  <div id="panel-favorites" style="display:none">
+    <div id="customer-favorites">
+      <div style="text-align:center;padding:30px"><div class="loader" style="margin:auto"></div></div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div style="text-align:center;padding:40px 20px;border-top:1px solid var(--cream-dk);margin-top:28px">
+    <div style="font-size:2rem;margin-bottom:12px">🎊</div>
+    <h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--crimson);margin-bottom:8px">Planning Your Wedding?</h3>
+    <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:20px">Browse our full collection of marriage halls and wedding vendors in Vijayapura.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="halls.html" class="btn btn-primary">Browse All Halls →</a>
+      <a href="vendors.html" class="btn btn-outline">Find Vendors →</a>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer style="background:var(--dark);color:rgba(255,255,255,0.5);text-align:center;padding:20px;font-size:0.82rem">
+  © 2024 ShaadiHall — Made with ❤️ for Vijayapura
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+<script src="js/vendor.js"></script>
+<script>
+  function switchCustomerTab(tab, el) {
+    document.querySelectorAll(".customer-tab").forEach(t => t.classList.remove("active"));
+    el.classList.add("active");
+    document.getElementById("panel-bookings").style.display  = tab === "bookings"  ? "" : "none";
+    document.getElementById("panel-favorites").style.display = tab === "favorites" ? "" : "none";
+  }
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    await initCustomerDashboard();
+
+    // Avatar letter
+    const name = document.getElementById("cust-name").textContent;
+    const av   = document.getElementById("cust-avatar");
+    if (av && name && name !== "…") av.textContent = name[0].toUpperCase();
+
+    // Count stats
+    const user = auth.currentUser;
+    if (user) {
+      const [bookSnap, favSnap] = await Promise.all([
+        db.collection("bookings").where("customerId","==",user.uid).get(),
+        db.collection("favorites").where("userId","==",user.uid).get()
+      ]);
+      document.getElementById("stat-book-count").textContent = bookSnap.size;
+      document.getElementById("stat-fav-count").textContent  = favSnap.size;
+    }
+    hideLoading();
+  });
+</script>
+</body>
+</html>
