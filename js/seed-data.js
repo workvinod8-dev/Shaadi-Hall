@@ -548,9 +548,7 @@ async function seedData() {
     alert("✅ Data seeded successfully! Refresh the page to see halls.");
   } catch (err) {
     console.error("❌ Seed error:", err.code, err.message);
-    alert("Error seeding data: " + err.message + "
-
-Make sure you are running this from a page that has firebase-config.js loaded (e.g. index.html).");
+    alert("Error seeding data: " + err.message);
   }
 }
 
